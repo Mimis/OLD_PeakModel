@@ -1,4 +1,4 @@
-package org.thesis.java.xml;
+package org.thesis.xml;
 
 import java.io.BufferedReader;
 import java.io.File;
