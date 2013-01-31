@@ -1,4 +1,4 @@
-package edu.ngram.lucene.util;
+package org.zipfslaw;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;

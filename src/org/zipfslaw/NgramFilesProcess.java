@@ -1,11 +1,9 @@
-package edu.ngram.general;
+package org.zipfslaw;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-
-import edu.ngram.lucene.util.Helper;
 
 public class NgramFilesProcess {
 
