@@ -3,7 +3,7 @@
      <dataSource  type="FileDataSource" encoding="UTF-8" />
      <document>
         <entity name="article"
-        		url="/home/mimis/Development/eclipse_projects/MyThesis/data/KB/sample.xml"
+        		url="/home/mimis/Development/eclipse_projects/PeakModel/data/KB/1991.xml"
                 processor="XPathEntityProcessor"
                 stream="true"   							
                 forEach="/KBroot/root" >
