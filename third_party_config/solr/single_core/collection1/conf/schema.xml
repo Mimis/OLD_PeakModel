@@ -99,18 +99,16 @@
 
    <!--############ Mimis FIELDS THAT WE USE ON THE APP############-->
 	<field name="id" 		    			type="string"   indexed="true" 		stored="true" 	required="true" multiValued="false" /> 
-	<field name="date" 						type="date"    	indexed="true"  	stored="true"	omitNorms="true"	termVectors="false"		multiValued="false"/>
-	<field name="subject"       			type="string"   indexed="false"  	stored="true" />
-	<field name="newspaper_id" 			    type="string"   indexed="true" 		stored="true" 	 multiValued="false" /> 
+	<field name="date" 						type="date"    	indexed="true"  	stored="true"	 omitNorms="true"	termVectors="false"		multiValued="false"/>
+	<field name="subject"       			type="string"   indexed="true"  	stored="true" 	 multiValued="false"/>
+	<field name="newspaper_id" 			    type="string"   indexed="false" 	stored="true" 	 multiValued="false" /> 
 	<field name="newspaper_name" 		    type="string"   indexed="false" 	stored="true" 	 multiValued="false" />
-	<field name="article_url" 				type="string" 	indexed="false"		stored="true"/>
+	<field name="article_url" 				type="string" 	indexed="false"		stored="true"	 multiValued="false"/>
 	<!-- Search Fields -->
 	<field name="article_title" 	      	type="text_general"         indexed="true"  stored="true"   omitNorms="false" 	termVectors="true" multiValued="false"/>
-	<field name="paragraph"     			type="text_general"         indexed="true"  stored="true"  	omitNorms="false" 	termVectors="true" multiValued="false"	termPositions="true"	termOffsets="true"/>
-	<!-- catchall field, containing all other searchable text fields (implemented   via copyField further on in this schema  -->
-	<field name="allText" 					type="text_general" 		indexed="true" 	stored="false" 	multiValued="true"/>	
+	<field name="paragraph"     			type="text_general"         indexed="true"  stored="true"  	omitNorms="false" 	termVectors="true" multiValued="true"/>
 	<!-- Feedback fields  -->
-    <field name="feedback_author" 			type="string" indexed="false"  stored="true"/>
+    <field name="feedback_author" 			type="string" 		indexed="false"  stored="true"/>
 	<field name="feedback"     			    type="string"   	indexed="false"  stored="true" />
 	<!-- ############Mimis Feilds ends############ -->
               
@@ -257,7 +255,6 @@
         is added to the index.  It's used either to index the same field differently,
         or to add multiple fields to the same field for easier/faster searching.  -->
 
-<copyField source="paragraph" dest="allText"/>
  
   <types>
     <!-- field type definitions. The "name" attribute is
