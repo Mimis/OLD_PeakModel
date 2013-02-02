@@ -100,7 +100,7 @@
    <!--############ Mimis FIELDS THAT WE USE ON THE APP############-->
 	<field name="id" 		    			type="string"   indexed="true" 		stored="true" 	required="true" multiValued="false" /> 
 	<field name="date" 						type="date"    	indexed="true"  	stored="true"	 omitNorms="true"	termVectors="false"		multiValued="false"/>
-	<field name="subject"       			type="string"   indexed="true"  	stored="true" 	 multiValued="false"/>
+	<field name="subject"       			type="string"   indexed="false"  	stored="true" 	 multiValued="false"/>
 	<field name="newspaper_id" 			    type="string"   indexed="false" 	stored="true" 	 multiValued="false" /> 
 	<field name="newspaper_name" 		    type="string"   indexed="false" 	stored="true" 	 multiValued="false" />
 	<field name="article_url" 				type="string" 	indexed="false"		stored="true"	 multiValued="false"/>
