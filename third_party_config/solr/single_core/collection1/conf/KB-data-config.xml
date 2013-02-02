@@ -6,11 +6,12 @@
         		url="/home/mimis/Development/eclipse_projects/PeakModel/data/KB/sample.xml"
                 processor="XPathEntityProcessor"
                 stream="true"   							
-                forEach="/KBroot/root" >
+                forEach="/KBroot/root" 
+                transformer="DateFormatTransformer" >
                 
                 
             <field column="id"        		xpath="/KBroot/root/meta/identifier" />
-            <field column="date"        	xpath="/KBroot/root/meta/date" />
+            <field column="date"       		xpath="/KBroot/root/meta/date" 		dateTimeFormat="yyyy-MM-dd" locale="en" />
             <field column="subject"         xpath="/KBroot/root/meta/subject" />
             <field column="newspaper_id"    xpath="/KBroot/root/meta/source/source/link/@source" />
             <field column="newspaper_name"  xpath="/KBroot/root/meta/source/source/link/@description" />
