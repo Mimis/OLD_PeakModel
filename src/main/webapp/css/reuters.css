@@ -1,0 +1,344 @@
+  /* Override some defaults */
+
+
+
+¨	white-space:nowrap{
+}
+
+
+		.doc {
+		  -webkit-box-sizing: border-box;
+		  -moz-box-sizing: border-box;
+		  box-sizing: border-box;
+		  padding: 22px;
+		}
+		.doc > .doc_border {
+		  border-top: 4px solid #888;
+		}
+		.doc > .doc_header {
+		  padding: 0px;
+		}
+
+		
+		.doc > .doc_header > .doc_details > .media > a > img {
+			width: 130px;
+			height: 70px;
+		}
+		
+		
+		
+		
+		.doc > .doc_header > .doc_details > .media > .media-body > .left {
+		  float: left;
+		  max-width: 580px;
+		  overflow: hidden;
+		  text-overflow: ellipsis;
+		  white-space: nowrap;
+		}
+		.doc > .doc_header > .doc_details > .media > .media-body > .right {
+		  display: inline-block;
+		  float: right;
+		  max-width: 145px;
+		} 
+		
+		
+		.doc  .doc_header  .doc_details  .media  .media-body  .left  .company_name,
+		.doc  .doc_header  .doc_details  .media  .media-body  .left	 .date,
+		.doc  .doc_header  .doc_details  .media  .media-body  .left  .location {
+		  font-size: 17px;
+		  font-family: ag-m;
+		  display: inline-block;
+		  color: #888;
+		  cursor: default;
+		  float: left;
+		  margin-right: 10px;
+		}
+		.doc > .doc_header > .doc_details > .media > .media-body > .left > .date {
+		  text-overflow: ellipsis;
+		  max-width: 223px;
+		  overflow: hidden;
+		  white-space: nowrap;
+		}
+		
+		
+		
+		
+		/**
+		JOB TITLE
+		**/
+		 .doc > .doc_header > .doc_title {
+		  clear: both;
+		  float: none;
+		  padding: 0 0 20px 0;
+		  font-family: ag-m;
+		  padding-bottom: 0px;		  
+		} 
+		
+		.doc > .doc_header > .doc_details > .media > .media-body > p {
+		  font-size: 28px;
+		  line-height: 28px;
+		  overflow: hidden;
+		  text-overflow: ellipsis;
+		  white-space: nowrap;
+		}
+		.doc > .doc_header > .doc_details > .media > .media-body > p > a {
+		  color: black;
+		  text-decoration: none;
+		}
+		
+		
+		/**
+		Doc Actions
+		**/
+		
+		.doc_actions {
+		  font-size: 17px;		
+		  display: inline-block;
+		  float: right;
+		  max-width: 145px;		  
+		} 
+		
+		/**
+		Doc Content
+		**/
+		.doc > .doc_content  {
+		  padding-bottom: 25px;
+		  overflow: auto;
+		}
+		
+		.doc  .doc_content   > .left,
+		.doc  .doc_content   > .right {
+		  float: left;
+		  width: 50%;
+		  -webkit-box-sizing: border-box;
+		  -moz-box-sizing: border-box;
+		  box-sizing: border-box;
+		  line-height: 20px;
+		}
+		
+		.doc  .doc_content  .right {
+		  float: right;
+		}
+		
+		
+				
+
+	  html, body {
+        background-color: #ffff;
+      }
+       /* body {
+        padding-top: 40px; 40px to make the container go all the way to the bottom of the topbar
+      } */
+      
+      .container > footer p {
+        text-align: center; /* center align it with the container */
+      }
+      
+      /*this modifies the width of the container that contains the two spans  */
+       .container {
+       /* margin-left: 60px; */
+       width: 1220px; /* downsize our container to make the content feel a bit tighter and more cohesive. NOTE: this removes two full columns from the grid, meaning you only go to 14 columns and not 16. */
+      } 
+
+
+
+
+
+      /* The white background content wrapper */
+      .container > .content {
+        background-color: #ffff;
+        padding: 20px;
+        margin: 0 -20px; /* negative indent the amount of the padding to maintain the grid system */
+        -webkit-border-radius: 0 0 6px 6px;
+           -moz-border-radius: 0 0 6px 6px;
+                border-radius: 0 0 6px 6px;
+        -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.15);
+           -moz-box-shadow: 0 1px 2px rgba(0,0,0,.15);
+                box-shadow: 0 1px 2px rgba(0,0,0,.15);
+      }
+
+	
+	
+      /* Page header tweaks */
+      .page-header {
+        background-color: #41A5D5;
+        padding: 20px 20px 10px;
+        margin: -20px -60px 20px;
+       
+      }
+      
+      ul.te-tags{
+       height:auto;
+       padding-right:47px;
+       width:360px;
+       background-image:url(/media/img/tag/tag18-search.png);
+       background-position:right center;
+       background-repeat:no-repeat;
+      }
+
+      /*This the orange color for our logo.  */
+      #homepage_link{
+       color: white;
+       font-size: 43px;
+      }
+      
+       
+      
+
+      /* Styles you shouldn't keep as they are for displaying this base example only */
+      .content .span10,
+      .content .span4 {
+        min-height: 500px;
+      }
+      /* Give a quick and non-cross-browser friendly divider */
+      .content .span10 {
+        margin-right: 0;
+        padding-right: 19px;
+        border-right: 1px solid #eee;
+      }
+
+      .topbar .btn {
+        border: 0;
+      }
+      	
+      
+	div.inline { float:left; }
+	div.clearfix { float:left; }
+	.clearBoth { clear:both; }
+  
+
+
+	
+.location{color:#666;font-size:11pt;white-space:nowrap;}
+
+
+
+
+/* Extraction Date and View All links */
+.date{color:#808080;}
+.source{white-space:nowrap;}
+.source{color:#008040;}
+
+
+
+#wrap {
+  width: 1000px;
+  margin: 0px auto;
+}
+.clear {
+  clear: both;
+}
+
+/* header */
+
+#header {
+  height: 90px;
+}
+#header h1 {
+  padding: 20px 0 5px 10px;
+  font-size: 20px;
+  letter-spacing: -2px;
+}
+#header h2 {
+  	padding-left: 10px;
+  color: #666;
+  font-size: 14px;
+  font-weight: 100;
+}
+#header h3 {
+  height: 90px;
+}
+
+#pager,
+#pager-header {
+  display: inline;
+}
+#pager li,
+.links li {
+  list-style-type: none;
+  display: inline;
+}
+
+#selection {
+  padding: 10px 15px 0;
+}
+#selection li {
+  list-style-type: none;
+}
+#docs {
+  padding-top: 1px;
+}
+
+#search input {
+  width: 260px;
+}
+#calendar {
+  width: 100px;
+}
+
+#search_help {
+  font-size: 80%;
+}
+.tagcloud {
+  padding: 10px 15px 0;
+}
+.tagcloud_item {
+  float: left;
+  display: block;
+  margin-right: 4px;
+  color: #6998f0;
+}
+.tagcloud_item:hover {
+  color: #f00;
+}
+
+/* tagcloud */
+
+a.tagcloud_size_0 {
+font-size: 80%;
+}
+a.tagcloud_size_1 {
+font-size: 90%;
+}
+a.tagcloud_size_2 {
+font-size: 100%;
+}Rst
+a.tagcloud_size_3 {
+font-size: 110%;
+}
+a.tagcloud_size_4 {
+font-size: 120%;
+}
+a.tagcloud_size_5 {
+font-size: 130%;
+}
+a.tagcloud_size_6 {
+font-size: 140%;
+}
+a.tagcloud_size_7 {
+font-size: 150%
+}
+a.tagcloud_size_8 {
+font-size: 160%;
+}
+a.tagcloud_size_9 {
+font-size: 170%;
+}
+a.tagcloud_size_10 {
+font-size: 180%;
+}
+
+
+/* view-source:http://www.webdesignerwall.com/demo/jquery/simple-slide-panel.html */
+#panel1 {
+	display: none;
+}
+#panel2 {
+	display: none;
+}
+#panel3 {
+	display: none;
+}
+#panel4 {
+	display: none;
+}
