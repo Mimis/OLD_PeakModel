@@ -19,15 +19,14 @@
 						self.manager.doRequest(0);
 					}
 				}
-//				//search button
-//				if (self.requestSent === false) {					
-//					var value = $(self.target).find('input').val();
-//					if (value && self.set(value)){
-//						self.manager.doRequest(0);
-//					}
-//				}
-
 			});
+			//search button				
+			$(this.button_target).find('button').bind('click', function(e) {
+				var value = $(self.target).find('input').val();
+				if (value && self.set(value)){
+					self.manager.doRequest(0);
+				}
+			});	
 		},
 
 		/**

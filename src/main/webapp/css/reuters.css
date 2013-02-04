@@ -12,65 +12,47 @@
 		  box-sizing: border-box;
 		  padding: 22px;
 		}
-		.doc > .doc_border {
-		  border-top: 4px solid #888;
-		}
 		.doc > .doc_header {
 		  padding: 0px;
-		}
-
-		
-		.doc > .doc_header > .doc_details > .media > a > img {
-			width: 130px;
-			height: 70px;
+		  padding-bottom: 20px;
 		}
 		
+		.doc > .doc_header > .doc_details{
+		  margin-left: 0px;
+		}
 		
-		
-		
-		.doc > .doc_header > .doc_details > .media > .media-body > .left {
+		.doc > .doc_header > .doc_details > .left {
 		  float: left;
 		  max-width: 580px;
 		  overflow: hidden;
 		  text-overflow: ellipsis;
 		  white-space: nowrap;
 		}
-		.doc > .doc_header > .doc_details > .media > .media-body > .right {
+		.doc > .doc_header > .doc_details > .right {
 		  display: inline-block;
 		  float: right;
 		  max-width: 145px;
 		} 
 		
 		
-		.doc  .doc_header  .doc_details  .media  .media-body  .left  .company_name,
-		.doc  .doc_header  .doc_details  .media  .media-body  .left	 .date,
-		.doc  .doc_header  .doc_details  .media  .media-body  .left  .location {
+		.doc  .doc_header  .doc_details    .left  .newspaper_name,
+		.doc  .doc_header  .doc_details    .left  .date,
+		.doc  .doc_header  .doc_details    .left  .subject {
 		  font-size: 17px;
-		  font-family: ag-m;
 		  display: inline-block;
-		  color: #888;
 		  cursor: default;
-		  float: left;
 		  margin-right: 10px;
 		}
-		.doc > .doc_header > .doc_details > .media > .media-body > .left > .date {
+		.doc > .doc_header > .doc_details > .left > .date {
 		  text-overflow: ellipsis;
 		  max-width: 223px;
 		  overflow: hidden;
 		  white-space: nowrap;
 		}
 		
-		
-		
-		
-		/**
-		JOB TITLE
-		**/
 		 .doc > .doc_header > .doc_title {
 		  clear: both;
 		  float: none;
-		  padding: 0 0 20px 0;
-		  font-family: ag-m;
 		  padding-bottom: 0px;		  
 		} 
 		
@@ -102,8 +84,8 @@
 		Doc Content
 		**/
 		.doc > .doc_content  {
-		  padding-bottom: 25px;
 		  overflow: auto;
+		  background-color: white;
 		}
 		
 		.doc  .doc_content   > .left,

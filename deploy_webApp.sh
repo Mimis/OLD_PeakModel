@@ -2,10 +2,6 @@
 #!/bin/sh
 
 
-echo "target/app2.war"".war"
-
-echo "SVN update...";
-svn update
 
 echo "mvn clean Install...";
 mvn clean install

@@ -1,64 +1,33 @@
 (function($) {
 
-		
-	/**
-	 * Display CompanyName And ExtarctionDate next to the View All and More Info links
-	 */
-	AjaxSolr.theme.prototype.CompanyNameAndExtarctionDate = function(CompanyName,ExtractionDate) {
-		var output = '<span class="source">'+CompanyName+'</span>';
-		output += ' - ';
-		output += '<span class="date">'+ExtractionDate+'</span>';
-		return output;
-	};
-
-
 	
 	/**
-	 * AJAX Solr provides a AjaxSolr.theme utility to separate the HTML from the JavaScript.
-	 * 
-	 * Result Theme 
+	 * Document Wrapper
 	 */
-	AjaxSolr.theme.prototype.result = function(doc, snippet) {
-		var output = '<div class="doc">';
-		output += '<h3 id="header_' + doc.id + '"></h3>';
-		output += '<span class="location">Location: '+doc.location+'</span>';
-		output +=  snippet ;
-		output += '<p id="links_' + doc.id + '" class="links"></p>';
-		output += '</div>';
-		return output;
-	};
-	
-	/**
-	 * Initial Result Snippet heavily inspired from Prismatic
-	 */
-	AjaxSolr.theme.prototype.result_prismatic = function(doc, snippet) {
-		var output = '<div class="doc">';
-		output += 		'<div class="doc_border"></div>';
-		
+	AjaxSolr.theme.prototype.doc_wrapper = function(doc,snippet,link_to_original_article) {
+		var output = '<div class="doc hero-unit">';		
 		//DOC HEADER:doc details and doc title
 		output += 		'<div class="doc_header">';
-		//doc details and actions
-		output += 			'<div class="doc_details">';
-		output += 				'<div class="left">';
-		//1.COMPANY LOGO
-		//2.COMPANY NAME => link to view all companys' jobs
-		output += 					'<span class="company_name"  id="company_' + doc.id + '"></span>';
-		//items = items.concat(this.facetLinks('seed_url',doc.seed_url , 'View All'));		
-		//3.DOC EXTRACTION DATE
-		output += 					'<span class="date">'+Utils.parse_date(doc.extraction_date)+'</span>';
-		//4.DOC LOCATION => link to view all location's jobs
-		output += 					'<span class="location" id="location_' + doc.id+'"></span>';
-		output += 				'</div>';	
-		//right header doc details: icons for more info,snapsot and go to job's url actions
-		//1.APLPLY BUTTON=LINK TO ORIGINAL JOB DETAIL WEB PAGE 
-		output += 				'<div class="right">';
-		output += 					'<div  class="apply doc_actions"  id="detailPage_' + doc.id+'"></div>';
-		output += 				'</div>';
-		output += 			'</div>';
-		
 		//title
 		output += 			'<div class="doc_title">';
-		output += 				'<h3 id="header_' + doc.id + '"></h3>';
+		output += 				'<h3 id="header_' + doc.id + '">' + doc.article_title + '</h3>';
+		output += 			'</div>';
+		//LEFT HEADER
+		//doc details and actions
+		output += 			'<div class="doc_details row">';
+		output += 				'<div class="left">';
+		//newspaper NAME 
+		output += 					'<span class="newspaper_name label label-info"  id="newspaper_name_' + doc.id + '">' + doc.newspaper_name + '</span>';
+		//article DATE
+		output += 					'<span class="date">'+doc.date+'</span>';
+		//article Subject => link to view all location's jobs
+		output += 					'<span class="subject label label-info" id="subject_' + doc.id+'">'+ doc.subject +'</span>';
+		output += 				'</div>';
+		//RIGHT HEADER
+		//link to GO to original article 
+		output += 				'<div class="right">';
+		output += 					'<div  class="doc_actions"  id="detailPage_' + doc.id+'"> ' + link_to_original_article + '</div>';
+		output += 				'</div>';
 		output += 			'</div>';
 		output += 		'</div>';
 
@@ -74,55 +43,41 @@
 	};
 
 	/**
-	 * Initial Result Snippet using Company Logo(Twiter Bootstrap MEDIA)
+	 *  Snippet Display Theme
 	 */
-	AjaxSolr.theme.prototype.result_companyLogo = function(doc, company_img_logo_path, snippet) {
-		var output = '<div class="doc hero-unit">';
-
-		
-		//DOC HEADER
-		output += 		'<div class="doc_header">';
-		output += 			'<div class="doc_details">';
-		output += 				'<div class="media">';
-		output +=				'  <a class="pull-left" href="'+ doc.homepage_url +'" target="_blank">';
-		output +=				'		<img class="media-object img-polaroid" data-src="'+company_img_logo_path+'" src="'+company_img_logo_path+'">';
-		output +=				'  </a>';
-		output +=			    '  <div class="media-body">';
-		//TITLE
-		output += 				'		<p id="header_' + doc.id + '"></p>';
-
-		output += 				'  		<div class="left">';
-		output += 				'			<span class="company_name"  id="company_' + doc.id + '"></span>';
-		output += 				'			<span class="date">'+Utils.parse_date(doc.extraction_date)+'</span>';
-		output += 				'			<span class="location" id="location_' + doc.id+'"></span>';
-		output +=			    '  		</div>';
-		output += 				'  		<div class="right">';
-		output += 				'			<div  class="apply doc_actions"  id="detailPage_' + doc.id+'"></div>';
-		output +=			    '  		</div>';
-		output +=			    '  </div>';
-		output += 			'	</div>';
-		output += 		'	</div>';
-
-		output += 			'<div class="doc_title">';
-
-		output += 			'</div>';
-
-		output += 		'</div>';
-
-		//DOC MAIN CONTENT
-		output += 		'<div class="doc_content">';
-		output +=  			snippet ;
-		output += 		'</div>';
-		
-		
-//		output += '<p id="links_' + doc.id + '" class="links"></p>';
-		output += '</div>';
+	AjaxSolr.theme.prototype.snippet = function(paragraphArray) {
+		var output = '';
+		if (paragraphArray != null && paragraphArray.length > 1) {
+			output +=  '<p>' + paragraphArray[0] +'</p>';
+			output += '<span style="display:none;">';
+			for (var i=1; i<paragraphArray.length; i++) {
+				output +=  '<p>' + paragraphArray[i] +'</p>';
+			}
+			output += '</span> <a href="#" class="more">more</a>';
+		} else if (paragraphArray != null){
+			output +=  '<p>' + paragraphArray[0] +'</p>';
+		}
 		return output;
+	};
+	
+	/**
+	 * Ajac loader html code
+	 */
+	AjaxSolr.theme.prototype.ajax_loader = function() {
+		var ajax_loader_html =  '<div id="loader" class="span10" style="line-height: 115px; text-align: center; padding-top: 300px;">';
+		ajax_loader_html +=    		'<img width="35" height="35" src="images/ajax-loader.gif">';
+		ajax_loader_html +=     '</div>'
+	   	return ajax_loader_html;
 	};
 
 	
-	
-	
+	/**
+	 * make link to go to external page
+	 */
+	AjaxSolr.theme.prototype.go_to_link = function(url,anchor) {
+		return '<a  class="external"  target="_blank"  href="'+url+'">'+anchor+'</a>';
+	};
+
 	
 	/**
 	 * Snippet Display Theme: bootstrap tab with fields:requirents,description,company
@@ -185,72 +140,11 @@
 	
 	
 	
-	/**
-	 * OLD Snippet Display Theme
-	 */
-	AjaxSolr.theme.prototype.snippet = function(doc) {
-		var output = '';
-		if (doc.description.length > 500) {
-//			output += '<p>' + ' RecordText:' + doc.recordText.substring(0, 300) + '</p>';
-			output +=  doc.description.substring(0, 500);
-			output += '<span style="display:none;">' + doc.description.substring(500);
-			output += '</span> <a href="#" class="more">more</a>';
-		} else {
-//			output += '<p>' + ' RecordText:' + doc.recordText  + '</p>';
-			output +=  doc.description;
-			//record text...
-			//output += doc.recordText;
-			//extraction date...
-			//output += '<br>' + doc.seed_name +' '+Utils.parse_date(doc.extraction_date)
-		}
-		return output;
-	};
-	
-	/**
-	 * Ajac loader html code
-	 */
-	AjaxSolr.theme.prototype.ajax_loader = function() {
-		var ajax_loader_html =  '<div id="loader" class="span10" style="line-height: 115px; text-align: center; padding-top: 300px;">';
-		ajax_loader_html +=    		'<img width="35" height="35" src="images/ajax-loader.gif">';
-		ajax_loader_html +=     '</div>'
-	   	return ajax_loader_html;
-	};
 
 	
 	
-	/**
-	 * Modal window
-	 */	
-	AjaxSolr.theme.prototype.modal = function(doc,img_src) {
-		var modal = '';
-		modal += '<div id="detailPageModal_'+doc.id+'" class="modal container hide fade" tabindex="-1" style="display: none;" aria-hidden="true">';
-		
-		modal += '	<div class="modal-header">';
-		modal += '			<strong>Job Detail page Snapshot!</strong>';
-		modal += '			<a title="Apply!" target="_blank" class="btn btn-success" href="' + doc.detail_page_url + '">Apply!</a>';
-		modal += '			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>';
-		modal += '	</div>';
-		
-		modal += '	<div class="modal-body">';
-		modal += '		<img src="'+img_src+'"  style="height: 1500px;width: 1500px;" alt="" title="" />';
-		modal += '	</div>';
-		
-		modal += '	<div class="modal-footer">';
-		modal += '		<button type="button" data-dismiss="modal" class="btn">Close</button>';
-		modal += '	</div>';
-		modal += '</div>';
-	   	return modal;
-	};
 	
 	
-	
-	/**
-	 * make link to go to external page
-	 */
-	AjaxSolr.theme.prototype.go_to_link = function(url,anchor,explanationTextOfLink) {
-		return $('<a  class="external" rel="tooltip" target="_blank" data-original-title="'+explanationTextOfLink+'" href="'+url+'"/>').text(anchor);
-	};
-
 
 	/**
 	 * Links inside the Record - are going to be different than the tag cloud links

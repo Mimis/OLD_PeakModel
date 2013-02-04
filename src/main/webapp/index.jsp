@@ -10,7 +10,7 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	
-	<title>Amedoo</title>
+	<title>PeakModel</title>
 	
 	
 	
@@ -185,10 +185,9 @@
         	
         		<form class="form-inline" id="search_form">
         			<!-- LOGO link -->
-        			<a href="/app3" id="homepage_link"  rel="tooltip" data-placement="bottom" data-original-title="Go to HomePage"><strong>Amedoo</strong></a>
+        			<a href="/app" id="homepage_link"  rel="tooltip" data-placement="bottom" data-original-title="Go to HomePage"><strong>KB search engine</strong></a>
         			<!-- Search Box and Buttons(AutocompleteWidget) -->
         			<span id="keyword_query"><input  class="input-large search-query" type=text   placeholder="Job Title, keyword"/></span>
-        			<span id="location_query"><input  class="input-large search-query" type=text   placeholder="location"/></span>
 			      	<button type="submit" class="btn" id="search_button">Search</button>				  		 
         		</form>
         		<!-- CurrentSearchWidget -->
@@ -212,7 +211,7 @@
 							<div id="docs"></div>
 							
 							<!-- PAGINATION botom -->
-							<div class="pagination pagination-centered pagination-large" id="navigation">
+							<div class="pagination pagination-centered" id="navigation">
 								<ul id="pager2"></ul>
 							</div>
 							
@@ -229,22 +228,12 @@
 	        	   
 	        	    <div class="right">
 						
-						
+
 						<!-- ATTENTION IN CASE WE CHANGE THE SOLR VARIABLES WE HAVE TO CHANGE THESE ONES ALSO(I.E. here we change the id from "form_url" to "resource_url") 				-->
-						<h3 class="show_resources2">Tags</h3>
+						<h3 class="show_resources2">Title</h3>
 						<div id="panel2">
-							<div class="tagcloud hero-unit" id="job_title"></div>
+							<div class="tagcloud hero-unit" id="article_title"></div>
 						</div>
-						
-						<h3 class="show_resources1">Company</h3>
-						<div id="panel1">
-							<div class="tagcloud hero-unit" id="company_name"></div>
-						</div>
-						
-						<h3 class="show_resources3">Location</h3>
-						<div id="panel3">
-							<div class="tagcloud hero-unit" id="location"></div>
-						</div>			
 						
 						<div class="clear"></div>
 					</div>
@@ -257,7 +246,7 @@
       </div>
 
       <footer>
-        <p>&copy; Amedoo 2013</p>
+        <p>&copy; KB 2013</p>
       </footer>
 
     </div> <!-- /container -->

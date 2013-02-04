@@ -13,8 +13,7 @@ var Manager;
 		//In AJAX Solr, the Manager sends these requests, and passes the responses to each widget for handling.
 		Manager = new AjaxSolr.Manager({
 			//set url: http://groups.google.com/group/ajax-solr/browse_thread/thread/2e7c6f359234cc59/d2cff193e02fd9cd?lnk=gst&q=solrUrl#d2cff193e02fd9cd
-//			solrUrl : 'http://localhost:8080/solr/core0/'
-			solrUrl : 'http://178.79.168.58/solr/core1/'
+			solrUrl : 'http://localhost:8080/solr/'
 		});
 
 		
@@ -55,7 +54,7 @@ var Manager;
 		/*
 		 * Now, add three TagcloudWidget instances, one for each facet field:
 		 */
-		var fields = [ 'company_name', 'job_title','location' ];
+		var fields = [ 'article_title' ];
 		for (var i = 0, l = fields.length; i < l; i++) {
 		  Manager.addWidget(new AjaxSolr.TagcloudWidget({
 		    id: fields[i],
@@ -96,13 +95,6 @@ var Manager;
 //			fields : [ 'company_name', 'job_title' ]
 //		}));
 		
-		Manager.addWidget(new AjaxSolr.AutocompleteWidget({
-			id : 'text2',
-			target : '#location_query', 
-			button_target : '#search_form',
-			field : 'location',
-			fields : [  'location' ]
-		}));
 		
 		
 		
@@ -130,15 +122,15 @@ var Manager;
 				
 		
 		
-		//Mimis: add specific fields to return(we dont want the detail pages text everytime we search)
-		Manager.store.addByValue('fl', ['id','score','job_title','recordText','homepage_url','extraction_date','company_name','location','description','detail_page_url','detail_page_snapshot_path','company_snapshot_path'])
+		//Mimis: add specific fields to return
+		Manager.store.addByValue('fl', ['id','date','subject','newspaper_id','newspaper_name','article_url','paragraph','feedback_author','feedback','score','article_title']);  
 		
 		/*
 		 * First, add the Solr parameters to the Manager for faceting in reuters.js:
 		 */
 		var params = {
 			facet : true,
-			'facet.field' : [ 'company_name','job_title' ,'location'], //These fields are out facet fields
+			'facet.field' : [ 'article_title'], //These fields are out facet fields
 			'facet.limit' : 10, //display only 10 facet values
 			'facet.offset' : 0,
 			'facet.mincount' : 1,
