@@ -273,9 +273,10 @@ AjaxSolr.PagerWidget = AjaxSolr.AbstractWidget.extend(
    */
   renderSummaryOfResultsTopRight: function (target,perPage, offset, total,solr_responceTimeMs) {
 	  var solr_responceTimeSecs = solr_responceTimeMs / 1000;
-  	$(target).html($('<small/>').text('Jobs ' + Math.min(total, offset + 1) + ' to ' + Math.min(total, offset + perPage) + ' of ' + total + 
+  	$(target).html($('<small/>').text( Math.min(total, offset + 1) + ' to ' + Math.min(total, offset + perPage) + ' of ' + total +
+  	' Articles ' +		
   			
-  	' (' + solr_responceTimeSecs +' solr secs) '));
+  	' (' + solr_responceTimeSecs +' secs) '));
   },
   
 
