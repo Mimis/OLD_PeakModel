@@ -187,8 +187,10 @@
         			<!-- LOGO link -->
         			<a href="/app" id="homepage_link"  rel="tooltip" data-placement="bottom" data-original-title="Go to HomePage"><strong>KB search engine</strong></a>
         			<!-- Search Box and Buttons(AutocompleteWidget) -->
-        			<span id="keyword_query"><input  class="input-large search-query" type=text   placeholder="Job Title, keyword"/></span>
-			      	<button type="submit" class="btn" id="search_button">Search</button>				  		 
+        			<span id="keyword_query">
+        				<input  class="search-query" type=text   placeholder="Enter query"/>
+        			</span>
+			      	<button type="submit" class="btn btn-large" id="search_button">Search</button>				  		 
         		</form>
         		<!-- CurrentSearchWidget -->
 		      	<span  id="facet_holder" class="offset2"></span>

@@ -149,6 +149,13 @@
        
       }
       
+      
+      .container > .content > .page-header > .form-inline > span > input{
+		  width: 460px;		
+		  height: 35px;		  
+		}
+      
+      
       ul.te-tags{
        height:auto;
        padding-right:47px;
@@ -161,7 +168,7 @@
       /*This the orange color for our logo.  */
       #homepage_link{
        color: white;
-       font-size: 43px;
+       font-size: 30px;
       }
       
        
