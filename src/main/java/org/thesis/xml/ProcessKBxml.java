@@ -1,4 +1,5 @@
-package org.thesis.java.xml;
+
+package org.thesis.xml;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -8,20 +9,29 @@ import java.io.PrintWriter;
 
 public class ProcessKBxml {
 	public static void main(String args[]) throws IOException {
-		removeXmlAttributeNamespaces(args[0]);
+		
+		File file = new File(args[0]);
+		if(file.isFile() && file.getName().endsWith(".xml")){
+			System.out.println(file.getName());
+			removeXmlAttributeNamespaces(file);
+		}
+		else if(file.isDirectory()){
+			for (final File fileEntry : file.listFiles()) {
+				if(fileEntry.getName().endsWith(".xml")){
+					System.out.println(fileEntry.getName());
+					removeXmlAttributeNamespaces(fileEntry);
+				}
+		    }
+		}
 	}
 	
     
-	public static void removeXmlAttributeNamespaces(String fileForProcessing) throws IOException{
+	public static void removeXmlAttributeNamespaces(File file) throws IOException{
 		long startTime = System.currentTimeMillis();
 
-		String fileToReplace = fileForProcessing;
-		File file = new File(fileToReplace);
 		File tempFile = new File(file.getParent()+"/temp.txt");
-		
 
-		BufferedReader reader = new BufferedReader(
-				new FileReader(fileToReplace));
+		BufferedReader reader = new BufferedReader(new FileReader(file));
 		PrintWriter writer = new PrintWriter(tempFile);
 		String line = null;
 		String matchRegex = "pm:source";
