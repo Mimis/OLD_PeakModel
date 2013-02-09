@@ -3,13 +3,13 @@
      <dataSource  type="FileDataSource" encoding="UTF-8" />
      <document>
      
-     <entity name="readFiles" rootEntity="false" dataSource="null"
+     <entity name="jc" rootEntity="false" dataSource="null"
              processor="FileListEntityProcessor"
              fileName="^.*\.xml$" recursive="true"
-             baseDir="/media/LaCie/#KB_DATA/data">
+             baseDir="/media/LaCie/#KB_data_index/data">
       
             <entity name="article"
-        		url="/home/mimis/Development/eclipse_projects/PeakModel/data/KB/1991.xml"
+        		url="${jc.fileAbsolutePath}"
                 processor="XPathEntityProcessor"
                 stream="true"   							
                 forEach="/KBroot/root" >
