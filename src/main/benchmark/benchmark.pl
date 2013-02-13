@@ -1,14 +1,14 @@
 #!/usr/bin/perl
 
 #--- start config ---
-my $forkCount = 8;
+my $forkCount = 2;
 my $queryCount = 512;
 my $outputDir = "/tmp/zot";
-my $querySource = "/usr/local/etc/queries";
+my $querySource = "/home/mimis/Development/eclipse_projects/PeakModel/src/main/benchmark/uni-queries";
 my $urlHost = "localhost";
 my $urlPort = "8080";
 my $urlCore = ""; # set to "" to not use a core
-my $urlOptions = "rows=10&fl=score,*";
+my $urlOptions = "rows=10&fl=score,article_title";
 my $uriEscape = 1; # Enable if queries are not already URI escaped
 my $writeResponses = 0; # Enable to write responses to disk
 #---- end config ----
@@ -60,6 +60,7 @@ for ($i = 0; $i < $forkCount; $i++) {
   if ($pid) {
     $kids{$pid} = 1;
   } else {
+    print "pid:",$pid," forc:",$forkCount,"\n";
     @queries = `cat $querySource`;
     $size = @queries;
 
@@ -76,7 +77,7 @@ for ($i = 0; $i < $forkCount; $i++) {
       $url = $urlTemplate;
       $url =~ s/QUERY/$query/;
 
-      print "url:", $url,"\n";
+      print "\t\t count:$i url:$url \n";
       $start = time();
       $r = get ($url);
       if (defined $r and $r) {
