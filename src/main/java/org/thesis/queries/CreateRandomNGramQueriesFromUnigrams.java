@@ -19,10 +19,11 @@ public class CreateRandomNGramQueriesFromUnigrams {
 		String unigramQueriesFile = "/Users/mimis/Development/Thesis/PeakModel/src/main/benchmark/uni-queries";
 		String outputNgramQueriesOutput = "/Users/mimis/Development/Thesis/PeakModel/src/main/benchmark/ngram-queries";
 		int max_ngram_size = 10;
-		createRamdomnnGramQueries(unigramQueriesFile, outputNgramQueriesOutput,max_ngram_size);
+		int min_ngram_size = 5;
+		createRamdomnnGramQueries(unigramQueriesFile, outputNgramQueriesOutput,max_ngram_size,min_ngram_size);
 	}
 	
-	public static void createRamdomnnGramQueries(String unigramQueriesFile,String outputNgramQueriesOutput,int max_ngram_size) throws IOException{
+	public static void createRamdomnnGramQueries(String unigramQueriesFile,String outputNgramQueriesOutput,int max_ngram_size,int min_ngram_size) throws IOException{
 		/*
 		 * Read unigram file
 		 */
@@ -46,7 +47,7 @@ public class CreateRandomNGramQueriesFromUnigrams {
 		for(String unig:unigramsList){
 			StringBuilder buf = new StringBuilder();
 			buf.append(unig+" ");
-			int currentNgramSize = randomGenerator.nextInt(max_ngram_size)+1;
+			int currentNgramSize = randomGenerator.nextInt(max_ngram_size - min_ngram_size + 1) + min_ngram_size;
 			for(int i=1;i<currentNgramSize;i++){
 				String newUnig = unigramsList.get(randomGenerator.nextInt(unigramsSize));
 				buf.append(newUnig+" ");
