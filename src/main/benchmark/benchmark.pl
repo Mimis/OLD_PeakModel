@@ -4,7 +4,7 @@
 my $forkCount = 2;
 my $queryCount = 512;
 my $outputDir = "/tmp/zot";
-my $querySource = "/home/mimis/Development/eclipse_projects/PeakModel/src/main/benchmark/uni-queries";
+my $querySource = "/home/mimis/Development/eclipse_projects/PeakModel/src/main/benchmark/ngram-queries";
 my $urlHost = "localhost";
 my $urlPort = "8080";
 my $urlCore = ""; # set to "" to not use a core
