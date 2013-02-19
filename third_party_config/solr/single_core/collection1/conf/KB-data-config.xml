@@ -6,7 +6,7 @@
      <entity name="jc" rootEntity="false" dataSource="null"
              processor="FileListEntityProcessor"
              fileName="^.*\.xml$" recursive="true"
-             baseDir="/media/LaCie_/#KB_data_index/data">
+             baseDir="/media/LaCie/#KB_data_index/data">
       		<!-- /home/mimis/Development/eclipse_projects/PeakModel/data/KB   -->
             <entity name="article"
         		url="${jc.fileAbsolutePath}"

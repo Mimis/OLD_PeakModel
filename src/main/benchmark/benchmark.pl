@@ -1,14 +1,14 @@
 #!/usr/bin/perl
 
 #--- start config ---
-my $forkCount = 2;
+my $forkCount = 1;
 my $queryCount = 512;
 my $outputDir = "/tmp/zot";
 my $querySource = "/home/mimis/Development/eclipse_projects/PeakModel/src/main/benchmark/ngram-queries";
 my $urlHost = "localhost";
 my $urlPort = "8080";
 my $urlCore = ""; # set to "" to not use a core
-my $urlOptions = "rows=10&fl=score,article_title";
+my $urlOptions = "rows=10&fl=id";
 my $uriEscape = 1; # Enable if queries are not already URI escaped
 my $writeResponses = 0; # Enable to write responses to disk
 #---- end config ----
