@@ -34,14 +34,15 @@ Uni-Gram queries(fork=1):Req/s: 0.906 (565.326 sec, requests 512/512)
 			   Max: 6.614
 
 
-I/O stats:$ iostat
-Linux 2.6.32-45-generic (mimis-laptop) 	02/19/2013 	_i686_	(2 CPU)
 
-avg-cpu:  %user   %nice %system %iowait  %steal   %idle
-          24.03    0.07    1.29   25.49    0.00   49.12
 
-Device:            tps   Blk_read/s   Blk_wrtn/s   Blk_read   Blk_wrtn
-sda               5.40       234.18       168.81     904022     651688
-sdb              73.84      3289.29         0.02   12698023         69
+
+
+
+
+
+
+
+
 
 
