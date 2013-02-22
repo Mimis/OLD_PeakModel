@@ -3,21 +3,21 @@
 Docs:29470178
 Time:29:37:59.129
 Size:34.24 GB
-N-Gram queries(fork=2): Req/s: 0.185 (5530.025 sec, requests 1024/1024)
+Top 4000 N-Gram queries(fork=2): Req/s: 0.185 (5530.025 sec, requests 1024/1024)
 			  Avg: 10.687
 		       Median: 10.918
 			 95th: 18.737
 			 99th: 24.876
 			  Max: 30.753
 
-Uni-Gram queries(fork=2):Req/s: 0.571 (1794.698 sec, requests 1024/1024)
+Top 4000 Uni-Gram queries(fork=2):Req/s: 0.571 (1794.698 sec, requests 1024/1024)
 			   Avg: 3.455
 			Median: 2.335
 			  95th: 9.465
 			  99th: 19.166
 			   Max: 52.942
 
-N-Gram queries(fork=1):  Req/s: 0.128 (4010.605 sec, requests 512/512)
+Top 4000 N-Gram queries(fork=1):  Req/s: 0.128 (4010.605 sec, requests 512/512)
 			   Avg: 7.832
 			Median: 7.642
 			  95th: 13.828
@@ -26,7 +26,7 @@ N-Gram queries(fork=1):  Req/s: 0.128 (4010.605 sec, requests 512/512)
 
 
 
-Uni-Gram queries(fork=1):Req/s: 0.906 (565.326 sec, requests 512/512)
+Top 4000 Uni-Gram queries(fork=1):Req/s: 0.906 (565.326 sec, requests 512/512)
 			   Avg: 1.104
 			Median: 1.026
 			  95th: 1.834
