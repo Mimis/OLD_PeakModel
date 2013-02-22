@@ -13,8 +13,10 @@ my $uriEscape = 1; # Enable if queries are not already URI escaped
 my $writeResponses = 0; # Enable to write responses to disk
 
 #date 
+my $createDateQueries = $ARGV[0];
 my $start_year = "1950";
 my $end_year = "1995";
+my $range = $end_year - $start_year;
 my $time_period_duration = 10; #given a date we transform it to a range query with the given length
 #---- end config ----
 
@@ -82,6 +84,11 @@ for ($i = 0; $i < $forkCount; $i++) {
       $url = $urlTemplate;
       $url =~ s/QUERY/$query/;
 
+	  #Create date queries
+	  if($createDateQueries){
+	    my $date = int(rand($range)) + $start_year;
+		$url = $url . "date:[".($date-$time_period_duration)."-01-01 TO ".($date+$time_period_duration)."-01-01]";
+	  }
       print "\t\t count:$i url:$url \n";
       $start = time();
       $r = get ($url);
