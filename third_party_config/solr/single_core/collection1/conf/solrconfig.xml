@@ -107,7 +107,7 @@
        replication is in use, this should match the replication
        configuration.
     -->
-  <dataDir>${solr.data.dir:/media/FREECOM HDD/#KB_data/index}</dataDir>
+  <dataDir>${solr.data.dir:/media/Free/#KB_data/index}</dataDir>
   <!-- old index from 1980-1995 -->
   <!-- <dataDir>${solr.data.dir:/var/lib/solr}</dataDir> -->
 

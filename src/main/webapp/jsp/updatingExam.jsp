@@ -20,6 +20,7 @@
 	String form_navigation_id = formText.split(":")[1]; 
 	String form_url = request.getParameter("form_url");
 	
+	//String database_code = request.getParameter("database_code").split(":")[1];
 	String database = "test";
 	
 %>
@@ -30,12 +31,13 @@
 
 <html>
 <head>
-	<title>Navigate again this resource - Updating Database delete all the job posts and the navigation patterns</title></head>
+	<title>...</title>
+</head>
 <body>
 <%
 	try {
 		Class.forName("com.mysql.jdbc.Driver");
-		con = DriverManager.getConnection ("jdbc:mysql://localhost/"+database, "root", "salle20mimis");
+		con = DriverManager.getConnection ("jdbc:mysql://localhost/"+database, "root", "root");
 				  
 		ps = null;
 		
@@ -43,7 +45,7 @@
 	    FIND FIRST IF THE CURRENT RESOURCE IS A LIST PAGE OR A FORM
 	    */
 	    stmt=con.createStatement();
-	    rst=stmt.executeQuery("SELECT form_id FROM navigation_pattern where id = "+form_navigation_id);
+	    rst=stmt.executeQuery("SELECT form_id FROM table2 where id = "+form_navigation_id);
 		String form_id = null;
 		while (rst.next()) {
 			form_id = rst.getString("form_id");
@@ -53,7 +55,7 @@
 		
 		//IS FORM  set it as not navigated in order to do visit again
 		if(form_id != null){
-			ps = con.prepareStatement("update form_table set navigated = 0 where id=?");
+			ps = con.prepareStatement("update table2 set navigated = 3 where id=?");
 			ps.setInt(1, Integer.parseInt(form_id));
 			ps.executeUpdate();
 			
@@ -63,7 +65,7 @@
 		
 		//else is a LIST PAGE
 		else{
-			ps = con.prepareStatement("update list_page set navigated = 0  where id=(SELECT list_id FROM navigation_pattern where id = ?)");
+			ps = con.prepareStatement("update list_page set navigated = 3  where id=(SELECT list_id FROM navigation_pattern where id = ?)");
 			ps.setInt(1, Integer.parseInt(form_navigation_id));
 			ps.executeUpdate();
 		}
@@ -93,7 +95,7 @@
 		
 		
 		%>
-			Database successfully Updated!  <br>Delete all extracted jobs from this form <br>DELETE the navigation_patterns<br>  
+			Database successfully Updated!  <br>Updating Database delete all the job posts and the navigation patterns and assign the resource page's navigation field to "3"<br>  
 		<%
 		
 		
