@@ -1,4 +1,4 @@
-package org.thesis.xml;
+package org.thesis.queries;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -16,8 +16,8 @@ public class CreateRandomNGramQueriesFromUnigrams {
 	 * @throws IOException 
 	 */
 	public static void main(String[] args) throws IOException {
-		String unigramQueriesFile = "/Users/mimis/Development/Thesis/PeakModel/src/main/benchmark/uni-queries";
-		String outputNgramQueriesOutput = "/Users/mimis/Development/Thesis/PeakModel/src/main/benchmark/ngram-queries";
+		String unigramQueriesFile = "/Users/mimis/Development/Thesis/PeakModel/src/main/benchmark/Bottom4000_uni_queries";
+		String outputNgramQueriesOutput = "/Users/mimis/Development/Thesis/PeakModel/src/main/benchmark/Bottom4000_ngram-queries";
 		int max_ngram_size = 10;
 		int min_ngram_size = 5;
 		createRamdomnnGramQueries(unigramQueriesFile, outputNgramQueriesOutput,max_ngram_size,min_ngram_size);
