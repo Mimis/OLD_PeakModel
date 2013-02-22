@@ -4,7 +4,7 @@
 my $forkCount = 1;
 my $queryCount = 512;
 my $outputDir = "/tmp/zot";
-my $querySource = "/home/mimis/Development/eclipse_projects/PeakModel/src/main/benchmark/ngram-queries";
+my $querySource = "/home/mimis/Development/eclipse_projects/PeakModel/src/main/benchmark/$ARGV[2]-queries";
 my $urlHost = "localhost";
 my $urlPort = "8080";
 my $urlCore = ""; # set to "" to not use a core
@@ -17,7 +17,7 @@ my $createDateQueries = $ARGV[0];
 my $start_year = "1950";
 my $end_year = "1995";
 my $range = $end_year - $start_year;
-my $time_period_duration = 10; #given a date we transform it to a range query with the given length
+my $time_period_duration = $ARGV[1]; #given a date we transform it to a range query with the given length
 #---- end config ----
 
 use strict;
@@ -87,7 +87,7 @@ for ($i = 0; $i < $forkCount; $i++) {
 	  #Create date queries
 	  if($createDateQueries){
 	    my $date = int(rand($range)) + $start_year;
-		$url = $url . "date:[".($date-$time_period_duration)."-01-01 TO ".($date+$time_period_duration)."-01-01]";
+		$url = $url . "&date:[".($date-$time_period_duration)."-01-01 TO ".($date+$time_period_duration)."-01-01]";
 	  }
       print "\t\t count:$i url:$url \n";
       $start = time();
