@@ -11,6 +11,11 @@ my $urlCore = ""; # set to "" to not use a core
 my $urlOptions = "rows=10&fl=id";
 my $uriEscape = 1; # Enable if queries are not already URI escaped
 my $writeResponses = 0; # Enable to write responses to disk
+
+#date 
+my $start_year = "1950";
+my $end_year = "1995";
+my $time_period_duration = 10; #given a date we transform it to a range query with the given length
 #---- end config ----
 
 use strict;
