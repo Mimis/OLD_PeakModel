@@ -3,41 +3,190 @@
 Docs:29470178
 Time:29:37:59.129
 Size:34.24 GB
-Top 4000 N-Gram queries(fork=2): Req/s: 0.185 (5530.025 sec, requests 1024/1024)
-			  Avg: 10.687
-		       Median: 10.918
-			 95th: 18.737
-			 99th: 24.876
-			  Max: 30.753
 
-Top 4000 Uni-Gram queries(fork=2):Req/s: 0.571 (1794.698 sec, requests 1024/1024)
-			   Avg: 3.455
-			Median: 2.335
-			  95th: 9.465
-			  99th: 19.166
-			   Max: 52.942
-
-Top 4000 N-Gram queries(fork=1):  Req/s: 0.128 (4010.605 sec, requests 512/512)
+Top 4000 N-Gram queries(fork=1):  	perl benchmark.pl false 0 Top4000_ngram
+			 Req/s: 0.128 (4010.605 sec, requests 512/512)
 			   Avg: 7.832
 			Median: 7.642
 			  95th: 13.828
 			  99th: 17.528
 			   Max: 22.748
 
+			 Req/s: 0.124 (4138.711 sec, requests 512/512)
+			   Avg: 8.082
+			Median: 7.738
+			  95th: 15.442
+			  99th: 19.495
+			   Max: 23.662
+
+	No SOLR CACHE Use
+
+			 Req/s: 0.110 (4660.903 sec, requests 512/512)
+			   Avg: 9.101
+			Median: 8.240
+			  95th: 16.936
+			  99th: 21.408
+			   Max: 28.155
 
 
-Top 4000 Uni-Gram queries(fork=1):Req/s: 0.906 (565.326 sec, requests 512/512)
+
+Top 4000 Uni-Gram queries(fork=1):	perl benchmark.pl false 0 Top4000_uni
+			 Req/s: 0.906 (565.326 sec, requests 512/512)
 			   Avg: 1.104
 			Median: 1.026
 			  95th: 1.834
 			  99th: 2.989
 			   Max: 6.614
 
+			Req/s: 1.192 (429.579 sec, requests 512/512)
+			   Avg: 0.838
+			Median: 0.834
+			  95th: 1.369
+			  99th: 2.169
+			   Max: 2.919
+
+			 Req/s: 0.907 (564.445 sec, requests 512/512)
+			   Avg: 1.102
+			Median: 1.059
+			  95th: 1.817
+			  99th: 3.172
+			   Max: 4.740
+
+	No SOLR CACHE Use:
+
+			 Req/s: 1.071 (478.003 sec, requests 512/512)
+			   Avg: 0.933
+			Median: 0.881
+			  95th: 1.588
+			  99th: 2.422
+			   Max: 3.827
+
+
+
+Bottom 4000 Uni-Gram queries(fork=1):	perl benchmark.pl false 0 Bottom4000_uni
+   			 Req/s: 1.627 (314.626 sec, requests 512/512)
+			   Avg: 0.614
+			Median: 0.639
+			  95th: 0.944
+			  99th: 1.080
+			   Max: 1.675
+
+	No SOLR CACHE Use:
+
+			 Req/s: 2.290 (223.610 sec, requests 512/512)
+			   Avg: 0.436
+			Median: 0.442
+			  95th: 0.749
+			  99th: 0.947
+			   Max: 1.996
+
+
+
+Bottom 4000 Ngram-Gram queries(fork=1):	perl benchmark.pl false 0 Bottom4000_ngram
+			 Req/s: 0.456 (1122.612 sec, requests 512/512)
+			   Avg: 2.192
+			Median: 2.105
+			  95th: 3.816
+			  99th: 5.035
+			   Max: 6.715
+
+			 Req/s: 0.478 (1070.735 sec, requests 512/512)
+			   Avg: 2.091
+			Median: 2.104
+			  95th: 3.630
+			  99th: 4.960
+			   Max: 7.149
+
+	No SOLR CACHE Use:
+
+			 Req/s: 0.468 (1092.907 sec, requests 512/512)
+			   Avg: 2.134
+			Median: 2.022
+			  95th: 3.687
+			  99th: 5.569
+			   Max: 6.828
 
 
 
 
 
+Filter(fq) Date queries(fork=1,time_period=2 years)
+======================================
+
+Top 4000 Uni-Gram Date queries(fork=1):		perl benchmark.pl true 1 Top4000_uni
+
+			 Req/s: 2.066 (247.792 sec, requests 512/512)
+			   Avg: 0.482
+			Median: 0.454
+			  95th: 0.845
+			  99th: 1.009
+			   Max: 1.698
+
+	No SOLR CACHE Use:
+
+			 Req/s: 1.310 (390.847 sec, requests 512/512)
+			   Avg: 0.763
+			Median: 0.749
+			  95th: 1.094
+			  99th: 1.315
+			   Max: 2.943
+
+
+Top 4000 Ngram-Gram Date queries(fork=1):	perl benchmark.pl true 1 Top4000_ngram
+
+			 Req/s: 0.408 (1256.150 sec, requests 512/512)
+			   Avg: 2.452
+			Median: 2.323
+			  95th: 3.978
+			  99th: 4.723
+			   Max: 10.127
+
+	No SOLR CACHE Use:
+			 Req/s: 0.495 (1033.398 sec, requests 512/512)
+			   Avg: 2.017
+			Median: 1.933
+			  95th: 3.130
+			  99th: 3.899
+			   Max: 4.433
+
+
+
+Bottom 4000 Uni-Gram Date queries(fork=1):	perl benchmark.pl true 1 Bottom4000_uni
+
+			 Req/s: 4.000 (127.986 sec, requests 512/512)
+			   Avg: 0.250
+			Median: 0.249
+			  95th: 0.466
+			  99th: 0.615
+			   Max: 1.207
+
+	No SOLR CACHE Use:
+
+			 Req/s: 2.303 (222.334 sec, requests 512/512)
+			   Avg: 0.434
+			Median: 0.420
+			  95th: 0.692
+			  99th: 0.781
+			   Max: 1.496
+
+
+Bottom 4000 Ngram-Gram Date queries(fork=1):	perl benchmark.pl true 1 Bottom4000_ngram
+
+			 Req/s: 0.681 (751.313 sec, requests 512/512)
+			   Avg: 1.465
+			Median: 1.356
+			  95th: 2.641
+			  99th: 3.465
+			   Max: 6.272
+
+	No SOLR CACHE Use:
+
+			 Req/s: 0.847 (604.721 sec, requests 512/512)
+			   Avg: 1.181
+			Median: 1.130
+			  95th: 1.894
+			  99th: 2.228
+			   Max: 3.044
 
 
 

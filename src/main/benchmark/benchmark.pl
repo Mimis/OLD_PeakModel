@@ -1,5 +1,6 @@
 #!/usr/bin/perl
 
+
 #--- start config ---
 my $forkCount = 1;
 my $queryCount = 512;
@@ -9,7 +10,7 @@ my $urlHost = "localhost";
 my $urlPort = "8080";
 my $urlCore = ""; # set to "" to not use a core
 my $urlOptions = "rows=10&fl=id";
-my $uriEscape = 1; # Enable if queries are not already URI escaped
+my $uriEscape = 0; # Enable if queries are not already URI escaped
 my $writeResponses = 0; # Enable to write responses to disk
 
 #date 
@@ -85,9 +86,9 @@ for ($i = 0; $i < $forkCount; $i++) {
       $url =~ s/QUERY/$query/;
 
 	  #Create date queries
-	  if($createDateQueries){
-	    my $date = int(rand($range)) + $start_year;
-		$url = $url . "&date:[".($date-$time_period_duration)."-01-01 TO ".($date+$time_period_duration)."-01-01]";
+	  if($createDateQueries eq "true"){
+	    	my $date = int(rand($range)) + $start_year;
+		$url = $url . "&fq=date:[".($date-$time_period_duration)."-01-01 TO ".($date+$time_period_duration)."-12-31]";
 	  }
       print "\t\t count:$i url:$url \n";
       $start = time();
