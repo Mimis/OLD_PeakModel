@@ -194,4 +194,25 @@ Bottom 4000 Ngram-Gram Date queries(fork=1):	perl benchmark.pl true 1 Bottom4000
 
 
 
+1)Multiple Shard Indexes:
+======================
+
+*1960-69:
+%%%%%%%%%
+Docs:
+Time:
+Size:
+
+Top 4000 N-Gram queries(fork=1):  	perl benchmark.pl false 0 Top4000_ngram
+Top 4000 Uni-Gram queries(fork=1):	perl benchmark.pl false 0 Top4000_uni
+Bottom 4000 Uni-Gram queries(fork=1):	perl benchmark.pl false 0 Bottom4000_uni
+Bottom 4000 Ngram-Gram queries(fork=1):	perl benchmark.pl false 0 Bottom4000_ngram
+
+Filter(fq) Date queries(fork=1,time_period=2 years)
+======================================
+
+Top 4000 Uni-Gram Date queries(fork=1):		perl benchmark.pl true 1 Top4000_uni
+Top 4000 Ngram-Gram Date queries(fork=1):	perl benchmark.pl true 1 Top4000_ngram
+Bottom 4000 Uni-Gram Date queries(fork=1):	perl benchmark.pl true 1 Bottom4000_uni
+Bottom 4000 Ngram-Gram Date queries(fork=1):	perl benchmark.pl true 1 Bottom4000_ngram
 

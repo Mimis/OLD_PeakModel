@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataConfig>
+     <dataSource  type="FileDataSource" encoding="UTF-8" />
+     <document>
+     
+     <entity name="jc" rootEntity="false" dataSource="null"
+             processor="FileListEntityProcessor"
+             fileName="^.*\.xml$" recursive="true"
+             baseDir="/media/LaCie/#KB_data_index/data/1990">
+            <entity name="article"
+        		url="${jc.fileAbsolutePath}"
+                processor="XPathEntityProcessor"
+                stream="true"   							
+                forEach="/KBroot/root" >
+                
+                
+                <field column="id"        		xpath="/KBroot/root/meta/identifier" />
+                <field column="date"       		xpath="/KBroot/root/meta/date"/>
+                <field column="subject"         xpath="/KBroot/root/meta/subject" />
+                <field column="newspaper_id"    xpath="/KBroot/root/meta/source/source/link/@source" />
+                <field column="newspaper_name"  xpath="/KBroot/root/meta/source/source/link/@description" />
+                <field column="article_url"  	xpath="/KBroot/root/content/@source" />
+                <field column="article_title"  	xpath="/KBroot/root/content/title" />
+                <field column="paragraph"	  	xpath="/KBroot/root/content/text/p" />            
+
+                <!-- THESE FIELDS should EXIST IN A MYSQL table
+                <field name="feedback_author" 	type="string" indexed="false"  stored="true"/>
+                <field name="feedback"     			    type="string"  indexed="false"  stored="true" /> -->
+            
+        </entity>            
+       </entity>
+     </document>
+</dataConfig>
