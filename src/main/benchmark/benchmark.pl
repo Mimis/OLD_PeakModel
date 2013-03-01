@@ -2,23 +2,27 @@
 
 
 #--- start config ---
+my $createDateQueries = "true";
+my $shard = "true";
+my $date_query_time_period_duration = $ARGV[0]; #given a date we transform it to a range query with the given length
+my $queryFile = $ARGV[1];
+
+
 my $forkCount = 1;
-my $queryCount = 512;
+my $queryCount = 52;
 my $outputDir = "/tmp/zot";
-my $querySource = "/home/mimis/Development/eclipse_projects/PeakModel/src/main/benchmark/$ARGV[2]-queries";
+my $querySource = "/home/mimis/Development/eclipse_projects/PeakModel/src/main/benchmark/$queryFile-queries";
 my $urlHost = "localhost";
 my $urlPort = "8080";
-my $urlCore = ""; # set to "" to not use a core
 my $urlOptions = "rows=10&fl=id";
 my $uriEscape = 0; # Enable if queries are not already URI escaped
 my $writeResponses = 0; # Enable to write responses to disk
 
+
 #date 
-my $createDateQueries = $ARGV[0];
 my $start_year = "1950";
 my $end_year = "1995";
 my $range = $end_year - $start_year;
-my $time_period_duration = $ARGV[1]; #given a date we transform it to a range query with the given length
 #---- end config ----
 
 use strict;
@@ -44,7 +48,7 @@ my $elapsed;
 my $stat;
 my %cfg;
 
-my $urlTemplate = "http://HOST:PORT/solr/COREselect/?q=QUERY&OPTIONS";
+my $urlTemplate = "http://HOST:PORT/solr/COREselect?SHARDq=QUERY&OPTIONS";
 my $url;
 
 ###
@@ -60,7 +64,7 @@ system "rm -f $outputDir/result/* 2> /dev/null" if length $outputDir
 
 $urlTemplate =~ s/HOST/$urlHost/;
 $urlTemplate =~ s/PORT/$urlPort/;
-$urlTemplate =~ s/CORE/$urlCore/;
+
 $urlTemplate =~ s/OPTIONS/$urlOptions/;
 
 for ($i = 0; $i < $forkCount; $i++) {
@@ -85,12 +89,38 @@ for ($i = 0; $i < $forkCount; $i++) {
       $url = $urlTemplate;
       $url =~ s/QUERY/$query/;
 
-	  #Create date queries
+
+      #Create date queries
+      my $date = "";
 	  if($createDateQueries eq "true"){
-	    	my $date = int(rand($range)) + $start_year;
-		$url = $url . "&fq=date:[".($date-$time_period_duration)."-01-01 TO ".($date+$time_period_duration)."-12-31]";
+	    	$date = int(rand($range)) + $start_year;
+		$url = $url . "&fq=date:[".($date-$date_query_time_period_duration)."-01-01 TO ".($date+$date_query_time_period_duration)."-12-31]";
 	  }
-      print "\t\t count:$i url:$url \n";
+
+      #shard parameters
+      my $shardCores = "";
+	  if($shard eq "true"){
+		my $min_date = substr($date-$date_query_time_period_duration,0,3) . "0";
+		my $max_date = substr($date+$date_query_time_period_duration,0,3) . "0";
+		print "\t\t date:$date \tmin_date:$min_date max_date:$max_date \n";
+
+		#get first three digits and append a zero at the end
+		$date = substr($date, 0, 3) . "0";
+		$shardCores = "shards=localhost:8080/solr/core$date";
+
+		if(($min_date ne $date)&&($min_date >= substr($start_year,0,3) ."0")){
+			$shardCores .= ",localhost:8080/solr/core$min_date";
+		}
+		if(($max_date ne $date)&&($max_date <= substr($end_year,0,3) ."0")){
+			$shardCores .= ",localhost:8080/solr/core$max_date";
+		}
+	  }
+      $url =~ s/CORE/core$date\//;
+      $url =~ s/SHARD/$shardCores&/;
+      print "count:$i url:$url \n";
+
+
+
       $start = time();
       $r = get ($url);
       if (defined $r and $r) {
