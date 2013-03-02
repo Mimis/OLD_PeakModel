@@ -7,7 +7,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-public class ProcessKBxml {
+public class RemoveXmlAttributeNamespacesFromKB {
 	public static void main(String args[]) throws IOException {
 		
 		File file = new File(args[0]);
