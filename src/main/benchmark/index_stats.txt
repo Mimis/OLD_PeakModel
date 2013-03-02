@@ -1,62 +1,29 @@
-1)Single Shard Index:
+1)Single  Index:
 ======================
 Docs:29470178
 Time:29:37:59.129
 Size:34.24 GB
 
-
 	Filter(fq) Date queries(fork=1,time_period=2 years)
 	======================================
 	Top 4000 Ngram-Gram Date queries(fork=1):	perl benchmark.pl true 1 Top4000_ngram
-
-			 Req/s: 0.408 (1256.150 sec, requests 512/512)
-			   Avg: 2.452
-			Median: 2.323
-			  95th: 3.978
-			  99th: 4.723
-			   Max: 10.127
-
-			 Req/s: 0.495 (1033.398 sec, requests 512/512)
-			   Avg: 2.017
-			Median: 1.933
-			  95th: 3.130
-			  99th: 3.899
-			   Max: 4.433
-	OPTIMIZED:
-
-			 Req/s: 0.282 (184.493 sec, requests 52/52)
-			   Avg: 3.542
-			Median: 3.510
-			  95th: 5.679
-			  99th: 7.240
-			   Max: 7.240
+	
+	Avg.Median: 2.86
+   	  Avg.95th: 4.737
+   	  Avg.99th: 6.133
 
 
-  			 Req/s: 0.347 (149.903 sec, requests 52/52)
-			   Avg: 2.881
-			Median: 2.967
-			  95th: 4.247
-			  99th: 6.053
-			   Max: 6.053
+  
 
-			 Req/s: 0.272 (191.186 sec, requests 52/52)
-			   Avg: 3.671
-			Median: 3.332
-			  95th: 6.656
-			  99th: 9.611
-			   Max: 9.611
-
-			 Req/s: 0.318 (163.717 sec, requests 52/52)
-			   Avg: 3.144
-			Median: 3.096
-			  95th: 4.734
-			  99th: 5.274
-			   Max: 5.274
-
-
-
-1)Multiple Shard Indexes:
+1)Multiple  Indexes:
 ======================
+
+*1950-59:
+%%%%%%%%%
+Docs: 5125546
+Time: 5h 37m
+Size: 5.42 GB
+
 
 *1960-69:
 %%%%%%%%%
@@ -85,57 +52,11 @@ Time: 4h 16s
 Size: 4.44 GB
 
 
-	Filter(fq) Date queries(fork=1,time_period=2 years)
+	 Filter(fq) Date queries(fork=1,time_period=2 years)
 	======================================
 	Top 4000 Ngram-Gram Date queries(fork=1):	perl benchmark.pl true 1 Top4000_ngram
 
-
-
-			 Req/s: 0.857 (60.691 sec, requests 52/52)
-			   Avg: 1.165
-			Median: 1.063
-			  95th: 1.836
-			  99th: 3.048
-			   Max: 3.048
-
-
-			 Req/s: 0.917 (56.722 sec, requests 52/52)
-			   Avg: 1.086
-			Median: 1.039
-			  95th: 1.644
-			  99th: 1.762
-			   Max: 1.762
-
-			 Req/s: 0.876 (59.380 sec, requests 52/52)
-			   Avg: 1.140
-			Median: 1.098
-			  95th: 1.849
-			  99th: 2.072
-			   Max: 2.072
-
-
-
-			 Req/s: 0.894 (58.163 sec, requests 52/52)
-			   Avg: 1.116
-			Median: 1.066
-			  95th: 1.642
-			  99th: 2.298
-			   Max: 2.298
-
-
-			 Req/s: 0.857 (60.648 sec, requests 52/52)
-			   Avg: 1.162
-			Median: 1.105
-			  95th: 1.698
-			  99th: 2.499
-			   Max: 2.499
-
-			 Req/s: 0.881 (58.994 sec, requests 52/52)
-			   Avg: 1.131
-			Median: 1.085
-			  95th: 1.707
-			  99th: 1.988
-			   Max: 1.988
-
-
+	Avg.Median: 1.076
+   	  Avg.95th: 1.729
+   	  Avg.99th: 2.277
 
