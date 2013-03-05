@@ -222,7 +222,8 @@ AjaxSolr.PagerWidget = AjaxSolr.AbstractWidget.extend(
   clickHandler: function (page) {
     var self = this;
     return function () {
-      self.manager.store.get('start').val((page - 1) * self.perPage());
+      var start = (page - 1) * self.perPage();
+      self.manager.store.get('start').val(start);
       self.doRequest();
       return false;
     }
@@ -317,33 +318,24 @@ AjaxSolr.PagerWidget = AjaxSolr.AbstractWidget.extend(
 	   * 
 	   * get the fields that the responce got 
 	   */
-	  var queryFields = this.manager.response.responseHeader.params.fl;
+	var queryFields = this.manager.response.responseHeader.params.fl;
 		
-	
-    /**
-	   * MIMIS: Assign the 'perPage','offset' and 'totalResults' based on the number of fields that the response got..
-	   * 1)we dont want to page the results   
-	   * also now we use fancy box for the detail pages so we dont need to do paging in thaT case
-	   */
-    if(this.manager.response.responseHeader.params && !(this.manager.response.responseHeader.params.fl.split(',').length == 3 && queryFields.search("detail_page_snapshot_path") != -1)){
-    	//new version of ajax-solr
-    	var perPage = this.perPage();
-    	var offset  = this.getOffset();
+	var perPage = this.perPage();
+	var offset  = this.getOffset();
 
-	    this.totalResults = parseInt(this.manager.response.grouped && this.manager.response.grouped['seed_url'] && this.manager.response.grouped['seed_url'].ngroups || this.manager.response.response.numFound);
-	    // Normalize the offset to a multiple of perPage.
-	    offset = offset - offset % perPage;
-	    this.currentPage = Math.ceil((offset + 1) / perPage);
-	    this.totalPages = Math.ceil(this.totalResults / perPage);
-	    
-	    $(this.target).empty();
-	    
-	    this.renderLinks(this.windowedLinks());
-	    //DISPLAY MESSAGE WITH RESUTLS AND PAGE NUMBER: "Jobs 1 to 10 of 23,275 (N milliseconds)"
-	    this.solr_responceTimeMs = this.manager.response.responseHeader.QTime;
-	    this.renderSummaryOfResultsTopRight(this.mini_sum_results_target,perPage, offset, this.totalResults,this.solr_responceTimeMs);
-	    
-    }
+    this.totalResults = parseInt(this.manager.response.grouped && this.manager.response.grouped['seed_url'] && this.manager.response.grouped['seed_url'].ngroups || this.manager.response.response.numFound);
+    // Normalize the offset to a multiple of perPage.
+    offset = offset - offset % perPage;
+    this.currentPage = Math.ceil((offset + 1) / perPage);
+    this.totalPages = Math.ceil(this.totalResults / perPage);
+    
+    $(this.target).empty();
+    
+    this.renderLinks(this.windowedLinks());
+    //DISPLAY MESSAGE WITH RESUTLS AND PAGE NUMBER: "Jobs 1 to 10 of 23,275 (N milliseconds)"
+    this.solr_responceTimeMs = this.manager.response.responseHeader.QTime;
+    this.renderSummaryOfResultsTopRight(this.mini_sum_results_target,perPage, offset, this.totalResults,this.solr_responceTimeMs);
+	
   }
   
   

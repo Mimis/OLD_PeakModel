@@ -113,6 +113,16 @@ AjaxSolr.AbstractManager = AjaxSolr.Class.extend(
     this.store = store;
   },
 
+  /**
+   * Set the manager's servlet.
+   *
+   * @param String servlet
+   */
+  setServlet: function (servlet) { 
+    this.servlet = servlet;
+  },
+  
+  
   /** 
    * Adds a widget to the manager.
    *

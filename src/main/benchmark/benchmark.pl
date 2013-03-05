@@ -6,8 +6,6 @@ my $createDateQueries = "true";
 my $shard = "true";
 my $date_query_time_period_duration = $ARGV[0]; #given a date we transform it to a range query with the given length
 my $queryFile = $ARGV[1];
-
-
 my $forkCount = 1;
 my $queryCount = 52;
 my $outputDir = "/tmp/zot";
@@ -17,13 +15,13 @@ my $urlPort = "8080";
 my $urlOptions = "rows=10&fl=id";
 my $uriEscape = 0; # Enable if queries are not already URI escaped
 my $writeResponses = 0; # Enable to write responses to disk
-
-
 #date 
 my $start_year = "1950";
 my $end_year = "1995";
 my $range = $end_year - $start_year;
 #---- end config ----
+
+
 
 use strict;
 use URI::Escape;

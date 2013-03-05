@@ -104,7 +104,15 @@
 		
 		
 				
-
+		.container > .content > .page-header > .form-inline > span >  .search-query{
+		  width: 400px;		
+		  height: 35px;		  
+		}
+		.container > .content > .page-header > .form-inline > span >  .date-query{
+		  width: 100px;		
+		  height: 35px;		  
+		}
+      
 	  html, body {
         background-color: #ffff;
       }
@@ -150,10 +158,6 @@
       }
       
       
-      .container > .content > .page-header > .form-inline > span > input{
-		  width: 460px;		
-		  height: 35px;		  
-		}
       
       
       ul.te-tags{

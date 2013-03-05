@@ -14,9 +14,12 @@ var Manager;
 		Manager = new AjaxSolr.Manager({
 			//set url: http://groups.google.com/group/ajax-solr/browse_thread/thread/2e7c6f359234cc59/d2cff193e02fd9cd?lnk=gst&q=solrUrl#d2cff193e02fd9cd
 			solrUrl : 'http://localhost:8080/solr/'
+				
+//SOLR_URL/CORE/select?SHARDS&q=toeschouwer
 		});
 
-		
+ 
+
 		/**
 		 * Any widget inheriting from AbstractFacetWidget takes a required field property, 
 		 * identifying the facet field the widget will handle. Note that, in our example, 
@@ -69,10 +72,22 @@ var Manager;
 		 */		
 		Manager.addWidget(new AjaxSolr.CurrentSearchWidget({
 			id : 'currentsearch',
-			target : '#facet_holder' //previous element id:#selection
+			target : '#facet_holder'
 		}));
 		
+		/*
+		 * Date Widget -  
+		 */		
+		var shards = [ 'core1950','core1960','core1970','core1980','core1990']; //this are the Shards that we use
 
+		Manager.addWidget(new AjaxSolr.DateWidget({
+			id : 'date',
+			target : '#date_query',
+			button_target : '#search_form',
+			field : 'date',
+			shards : shards //this are the Shards that we use
+		}));
+		
 		/*
 		 * Text Widget - Search the 'AllText' field 
 		 */		
@@ -81,19 +96,6 @@ var Manager;
 			target : '#keyword_query',
 			button_target : '#search_form'
 		}));
-		
-		/*SEARCH BOXES!!ONE FOR KEYWORDS AND ONE FOR LOCATION
-		 * AutoComplete Search - The autocompletion widget will take a custom fields parameter,
-		 * listing the facet fields on which to perform auto-completion. By not hard-coding these
-		 * facet fields, we make the widget re-usable.
-		 */
-//		Manager.addWidget(new AjaxSolr.AutocompleteWidget({
-//			id : 'text',
-//			target : '#keyword_query', 
-//			button_target : '#search_form',
-//			field : 'allText',
-//			fields : [ 'company_name', 'job_title' ]
-//		}));
 		
 		
 		
@@ -123,7 +125,7 @@ var Manager;
 		
 		
 		//Mimis: add specific fields to return
-		Manager.store.addByValue('fl', ['id','date','subject','newspaper_id','newspaper_name','article_url','paragraph','feedback_author','feedback','score','article_title']);  
+		Manager.store.addByValue('fl', ['id','score','article_url','article_title']);  
 		
 		/*
 		 * First, add the Solr parameters to the Manager for faceting in reuters.js:
@@ -140,7 +142,10 @@ var Manager;
 		for ( var name in params) {
 			Manager.store.addByValue(name, params[name]);
 		}
-		//To finish this iteration, check if we can talk to Solr using the AbstractManager doRequest API method:
+		
+		//set an initial core for servlet
+		Manager.setServlet(shards[3]+'/select');
+		//To finish this iteration, check if we can talk to Solr using the AbstractManager doRequest API method(use the first shard to search):
 		Manager.doRequest();
 	});
 

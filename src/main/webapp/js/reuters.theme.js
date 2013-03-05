@@ -4,40 +4,26 @@
 	/**
 	 * Document Wrapper
 	 */
-	AjaxSolr.theme.prototype.doc_wrapper = function(doc,snippet,link_to_original_article) {
+	AjaxSolr.theme.prototype.doc_wrapper = function(doc,link_to_original_article) {
 		var output = '<div class="doc hero-unit">';		
 		//DOC HEADER:doc details and doc title
 		output += 		'<div class="doc_header">';
 		//title
 		output += 			'<div class="doc_title">';
-		output += 				'<h3 id="header_' + doc.id + '">' + doc.article_title + '</h3>';
+		output += 				'<h3 id="header_' + doc.id + '">' + link_to_original_article + '</h3>';
 		output += 			'</div>';
-		//LEFT HEADER
-		//doc details and actions
-		output += 			'<div class="doc_details row">';
-		output += 				'<div class="left">';
-		//newspaper NAME 
-		output += 					'<span class="newspaper_name label label-info"  id="newspaper_name_' + doc.id + '">' + doc.newspaper_name + '</span>';
-		//article DATE
-		output += 					'<span class="date">'+doc.date+'</span>';
-		//article Subject => link to view all location's jobs
-		output += 					'<span class="subject label label-info" id="subject_' + doc.id+'">'+ doc.subject +'</span>';
-		output += 				'</div>';
-		//RIGHT HEADER
-		//link to GO to original article 
-		output += 				'<div class="right">';
-		output += 					'<div  class="doc_actions"  id="detailPage_' + doc.id+'"> ' + link_to_original_article + '</div>';
-		output += 				'</div>';
-		output += 			'</div>';
-		output += 		'</div>';
+		
+		
+//		output += '		<div class="doc_details row">';
+//		//RIGHT HEADER
+//		//link to GO to original article
+//		output += '			<div class="right">';
+//		output += '				<div class="doc_actions" id="detailPage_' + doc.id+'"> ' + link_to_original_article + '</div>';
+//		output += '			</div>';
+//		output += '		</div>';
+		output += '	</div>';
 
-		//DOC MAIN CONTENT
-		output += 		'<div class="doc_content">';
-		output +=  			snippet ;
-		output += 		'</div>';
-		
-		
-//		output += '<p id="links_' + doc.id + '" class="links"></p>';
+
 		output += '</div>';
 		return output;
 	};

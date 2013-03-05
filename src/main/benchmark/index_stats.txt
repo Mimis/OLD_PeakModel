@@ -34,14 +34,14 @@ Size: 7.51 GB
 *1970-79:
 %%%%%%%%%
 Docs: 6681998
-Time: 6h 17m
+Time: 6h 17m  (store title and url:6:58:9.473)
 Size: 13.36 GB
 
 
 *1980-89:
 %%%%%%%%%
 Docs:  7,110,650 
-Time: 7h 21m 36s
+Time: 7h 21m 36s (store title and url:7:19:20.103)
 Size: 11.05 GB
 
 

@@ -40,32 +40,11 @@
 				/*
 				 *  1.html wrapper Template for the whole job snippet 
 				 */
-				$(this.target).append(AjaxSolr.theme('doc_wrapper',doc,AjaxSolr.theme('snippet',doc.paragraph),AjaxSolr.theme('go_to_link',doc.article_url,"Original Article")));				
+				var title = doc.article_title === '' ? 'Undefined' : doc.article_title; 
+				$(this.target).append(AjaxSolr.theme('doc_wrapper',doc,AjaxSolr.theme('go_to_link',doc.article_url,title)));				
 			}
-		},
+		}	
 		
-		
-		/**
-		 * To implement the “more” link, we implement another abstract method: init. 
-		 * A widget’s init method is called once when the Manager’s init method is called.
-		 * 
-		 * Dependecy:
-		 * Add the JavaScript file for jQuery’s livequery plugin (in jQuery 1.3, you can use jQuery.live):
-		 *<script type="text/javascript" src="js/jquery.livequery.js"></script>
-		 */
-		init : function() {
-			$('a.more').livequery(function() {
-				$(this).toggle(function() {
-					$(this).parent().find('span').show();
-					$(this).text('less');
-					return false;
-				}, function() {
-					$(this).parent().find('span').hide();
-					$(this).text('more');
-					return false;
-				});
-			});
-		}
 	});
 
 })(jQuery);

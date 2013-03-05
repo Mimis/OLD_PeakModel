@@ -25,10 +25,7 @@
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
     <link href="./css/bootstrap.css" rel="stylesheet">
-    <link href="./css/bootstrap-modal.css" rel="stylesheet">
    	<script type="text/javascript" src="js/bootstrap/bootstrap.min.js"></script>
-   	<script type="text/javascript" src="js/bootstrap_modal/bootstrap-modalmanager.js"></script>
-   	<script type="text/javascript" src="js/bootstrap_modal/bootstrap-modal.js"></script>
     <!-- BOOTSTRAP TWITTER END -->
     
     
@@ -78,55 +75,23 @@
 	
 	<!-- Step 6: Free Text Widget -->
 	<script type="text/javascript" src="widgets/TextWidget.js"></script> 
-	
-	<!-- Step 7: AutoComplete -->
-	<link rel="stylesheet" type="text/css" href="ext/jquery.autocomplete.css" media="screen" />
-	<script type="text/javascript" src="ext/jquery.autocomplete.js"></script>
-	<script type="text/javascript" src="widgets/AutocompleteWidget.js"></script>
-	
+	<script type="text/javascript" src="widgets/DateWidget.js"></script> 		
 	<!-- Exposed Url Parameters -->
 	<script type="text/javascript" src="lib/core/ParameterHashStore.js"></script>
 	
 	
 	<!-- Jquery Append -->
 	<script type="text/javascript"> 
-		$(document).ready(function(){
- 						
-			$(".show_resources1").click(function(){
-				$("#panel1").slideToggle("slow");
-				$(this).toggleClass("active"); 
-				return false;
-			});	 
+		$(document).ready(function(){ 						
 			$(".show_resources2").click(function(){
 				$("#panel2").slideToggle("slow");
 				$(this).toggleClass("active"); 
 				return false;
 			});
-			$(".show_resources3").click(function(){
-				$("#panel3").slideToggle("slow");
-				$(this).toggleClass("active"); 
-				return false;
-			});
 
-			for (var i=1;i<=3;i++){
-/* 				$(".show_resources"+i).click(function(){
-					$("#panel"+i).slideToggle("slow");
-					 $(this).toggleClass("active");
-					return false;
-				});
- */				
-				//WE EXTEND BY DEFAULT THIS RESOURCE
-				$("#panel"+i).slideToggle("slow");
-				$(this).toggleClass("active"); 
-			}
-
-
-			
-		  	
-			//activate tooltips
-		    $('body').tooltip({
-		        selector: '[rel=tooltip]'
-		    });
+			//WE EXTEND BY DEFAULT THIS RESOURCE
+			$("#panel2").slideToggle("slow");
+			$(this).toggleClass("active"); 
 		    		     		    
 		});
 	</script> 
@@ -145,22 +110,6 @@
  				return false;
 			}
 	</script>
-	
-	
-	<!-- paginator: go to given page -->
-	<script type="text/javascript">
-		function goToGivenPage(){
-			  var pageNumber = parseInt(document.go_to_page.pageNumber.value);
-	 	      if(typeof(pageNumber) == 'undefined' && pageNumber != null){
-	 	    	 alert("You must enter a possitive integer-you enter: " + pageNumber);  
-	 	      }
-	 	      else{
-	 	    	 this.Manager.store.get('start').val((pageNumber - 1) * (this.Manager.response.responseHeader.params && this.Manager.response.responseHeader.params.rows || 10));
-	 	    	 this.Manager.doRequest(); 
-	 	      }
-		   	  return false;
-	    }
-    </script>
 </head>
 
 
@@ -170,13 +119,7 @@
 
 <body>
 	
-    <div class="container">
-	    <!-- FEEDBACK BUTTON!!!
-        <a href="mailto:amedoo.app@gmail.com" class="btn btn-small btn-info" title="[GMCP] Compose a new mail to this one" onclick="window.open('https://mail.google.com/mail/u/0/?view=cm&amp;fs=1&amp;tf=1&amp;to=amedoo.app@gmail.com','Compose new message','width=640,height=480');return false" rel="noreferrer">
-	        <i class="icon-comment icon-white"></i>
-	         Feedback
-        </a> -->
-    
+    <div class="container">    
     	<div class="content">
     	
     	
@@ -185,10 +128,13 @@
         	
         		<form class="form-inline" id="search_form">
         			<!-- LOGO link -->
-        			<a href="/app" id="homepage_link"  rel="tooltip" data-placement="bottom" data-original-title="Go to HomePage"><strong>KB search engine</strong></a>
-        			<!-- Search Box and Buttons(AutocompleteWidget) -->
+        			<a href="/app" id="homepage_link"  title="Go to HomePage"><strong>KB search engine</strong></a>
+        			<!-- Search Box and Buttons-->
         			<span id="keyword_query">
         				<input  class="search-query" type=text   placeholder="Enter query"/>
+        			</span>        			
+        			<span id="date_query">
+        				<input  class="date-query" type=text   placeholder="Enter date"/>
         			</span>
 			      	<button type="submit" class="btn btn-large" id="search_button">Search</button>				  		 
         		</form>
