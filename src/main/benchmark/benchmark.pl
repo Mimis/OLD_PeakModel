@@ -2,17 +2,26 @@
 
 
 #--- start config ---
-my $createDateQueries = "true";
-my $shard = "true";
 my $date_query_time_period_duration = $ARGV[0]; #given a date we transform it to a range query with the given length
 my $queryFile = $ARGV[1];
+my $useAllShards = $ARGV[2];
+my $createDateQueries = "false";
+if($useAllShards eq "false"){
+	$createDateQueries = "true";
+}
+
+my $shard = "false";
+if($createDateQueries eq "true"){
+	$shard = "true";
+}
+
 my $forkCount = 1;
-my $queryCount = 52;
+my $queryCount = 5;
 my $outputDir = "/tmp/zot";
 my $querySource = "/home/mimis/Development/eclipse_projects/PeakModel/src/main/benchmark/$queryFile-queries";
 my $urlHost = "localhost";
 my $urlPort = "8080";
-my $urlOptions = "rows=10&fl=id";
+my $urlOptions = "rows=10&fl=id,article_title,article_url,score"; 
 my $uriEscape = 0; # Enable if queries are not already URI escaped
 my $writeResponses = 0; # Enable to write responses to disk
 #date 
@@ -112,6 +121,15 @@ for ($i = 0; $i < $forkCount; $i++) {
 		if(($max_date ne $date)&&($max_date <= substr($end_year,0,3) ."0")){
 			$shardCores .= ",localhost:8080/solr/core$max_date";
 		}
+	  }
+
+	if($useAllShards eq "true"){
+		$date = "1950";
+		$shardCores = "shards=localhost:8080/solr/core1950";
+		$shardCores .= ",localhost:8080/solr/core1960";
+		$shardCores .= ",localhost:8080/solr/core1970";
+		$shardCores .= ",localhost:8080/solr/core1980";
+		$shardCores .= ",localhost:8080/solr/core1990";
 	  }
       $url =~ s/CORE/core$date\//;
       $url =~ s/SHARD/$shardCores&/;

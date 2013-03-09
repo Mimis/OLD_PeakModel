@@ -30,7 +30,7 @@
 			 var q = this.manager.store.get('q').val();
 			    if (q != '*:*') {
 			      links.push($('<a class="badge badge-info" href="#"/>').text('(x) ' + q).click(function () {
-			        self.manager.store.get('q').val('*:*');
+			        self.manager.store.get('q').val('test');
 			        self.doRequest();
 			        return false;
 			      }));
@@ -54,7 +54,7 @@
 			if (links.length > 1) {
 				links.unshift($('<a class="badge badge-info" href="#"/>').text('all(x)').click(
 						function() {
-					        self.manager.store.get('q').val('*:*');
+					        self.manager.store.get('q').val('test');
 					        self.manager.store.remove('fq');
 					        self.doRequest();
 							return false;

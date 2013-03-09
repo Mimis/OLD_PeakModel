@@ -12,21 +12,26 @@
 			var self = this;
 			//find the element 'input' in the Target element(id="search") - keydown is probably when we push enter
 			$(this.target).find('input').bind('keydown', function(e) {
+				
 				if (e.which == 13) {
+					console.log('text QUERY + SHARDS;date.buton  => non emptydate:');
+
 					var value = $(this).val();
 					//add a filter query if it is not seen before and send a request to Solr
 					if (value && self.set(value)) {
-						self.manager.doRequest(0);
+//						self.manager.doRequest(0);
 					}
 				}
 			});
 			//search button				
-			$(this.button_target).find('button').bind('click', function(e) {
-				var value = $(self.target).find('input').val();
-				if (value && self.set(value)){
-					self.manager.doRequest(0);
-				}
-			});	
+//			$(this.button_target).find('button').bind('click', function(e) {
+//				var value = $(self.target).find('input').val();
+//				console.log('text.buton  => query:'+value);
+//				if (value && self.set(value)){
+//					console.log('text.buton  => SET query:'+value);
+////					self.manager.doRequest(0);
+//				}
+//			});	
 		},
 
 		/**

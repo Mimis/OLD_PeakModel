@@ -8,17 +8,16 @@ var Manager;
 
 	$(function() {
 		
-		
+		//this our all the shards
+		var shards = [ 'core1950','core1960','core1970','core1980','core1990'];
 		
 		//In AJAX Solr, the Manager sends these requests, and passes the responses to each widget for handling.
 		Manager = new AjaxSolr.Manager({
 			//set url: http://groups.google.com/group/ajax-solr/browse_thread/thread/2e7c6f359234cc59/d2cff193e02fd9cd?lnk=gst&q=solrUrl#d2cff193e02fd9cd
 			solrUrl : 'http://localhost:8080/solr/'
-				
-//SOLR_URL/CORE/select?SHARDS&q=toeschouwer
 		});
-
  
+
 
 		/**
 		 * Any widget inheriting from AbstractFacetWidget takes a required field property, 
@@ -33,52 +32,46 @@ var Manager;
 			target : '#docs'  //The target is usually the CSS selector for the HTML element that the widget updates after each Solr request.
 		}));
 		
-		
-		
-
-			 
-		  
-		
+				
 		//PAGINATORS!!!  only BOTTOM
-		Manager.addWidget(new AjaxSolr.PagerWidget({
-			id: 'pager2',
-		    target: '#pager2',
-		    prevLabel: '&larr; Previous',
-		    nextLabel: 'Next &rarr;',
-		    innerWindow: 1,
-		    mini_sum_results_target: '#mini_result_message'
-		    //OLD IMPLEMENTATION FOR #mini_result_message
-//		    renderHeader: function (perPage, offset, total) {
-//		    	$('#mini_result_message').html($('<small/>').text('displaying ' + Math.min(total, offset + 1) + ' to ' + Math.min(total, offset + perPage) + ' of ' + total + ' jobs'));
-//		    }
-		}));
+//		Manager.addWidget(new AjaxSolr.PagerWidget({
+//			id: 'pager2',
+//		    target: '#pager2',
+//		    prevLabel: '&larr; Previous',
+//		    nextLabel: 'Next &rarr;',
+//		    innerWindow: 1,
+//		    mini_sum_results_target: '#mini_result_message'
+//		    //OLD IMPLEMENTATION FOR #mini_result_message
+////		    renderHeader: function (perPage, offset, total) {
+////		    	$('#mini_result_message').html($('<small/>').text('displaying ' + Math.min(total, offset + 1) + ' to ' + Math.min(total, offset + perPage) + ' of ' + total + ' jobs'));
+////		    }
+//		}));
 		
 		
 		/*
 		 * Now, add three TagcloudWidget instances, one for each facet field:
 		 */
-		var fields = [ 'article_title' ];
-		for (var i = 0, l = fields.length; i < l; i++) {
-		  Manager.addWidget(new AjaxSolr.TagcloudWidget({
-		    id: fields[i],
-		    target: '#' + fields[i],
-		    field: fields[i],
-		    maxLength : 15 //max number of characters to display for each Tag
-		  }));
-		}
+//		var fields = [ 'article_title' ];
+//		for (var i = 0, l = fields.length; i < l; i++) {
+//		  Manager.addWidget(new AjaxSolr.TagcloudWidget({
+//		    id: fields[i],
+//		    target: '#' + fields[i],
+//		    field: fields[i],
+//		    maxLength : 15 //max number of characters to display for each Tag
+//		  }));
+//		}
 
 		/*
 		 * Current Search Widjet ; Facet Holder part
 		 */		
-		Manager.addWidget(new AjaxSolr.CurrentSearchWidget({
-			id : 'currentsearch',
-			target : '#facet_holder'
-		}));
+//		Manager.addWidget(new AjaxSolr.CurrentSearchWidget({
+//			id : 'currentsearch',
+//			target : '#facet_holder'
+//		}));
 		
 		/*
 		 * Date Widget -  
-		 */		
-		var shards = [ 'core1950','core1960','core1970','core1980','core1990']; //this are the Shards that we use
+		 */	
 
 		Manager.addWidget(new AjaxSolr.DateWidget({
 			id : 'date',
@@ -91,11 +84,11 @@ var Manager;
 		/*
 		 * Text Widget - Search the 'AllText' field 
 		 */		
-		Manager.addWidget(new AjaxSolr.TextWidget({
-			id : 'text',
-			target : '#keyword_query',
-			button_target : '#search_form'
-		}));
+//		Manager.addWidget(new AjaxSolr.TextWidget({
+//			id : 'text',
+//			target : '#keyword_query',
+//			button_target : '#search_form'
+//		}));
 		
 		
 		
@@ -106,7 +99,7 @@ var Manager;
 		 */
 		Manager.setStore(new AjaxSolr.ParameterHashStore());
 		//Finally, list the parameters that your widgets allow the user to change under the store’s exposed property, for example:
-		Manager.store.exposed = [ 'fq', 'q', 'start', 'group.field', 'fl' ];
+		Manager.store.exposed = [ 'fq', 'q', 'start', 'group.field', 'fl', 'shards' ];
 		
 		
 		/*
@@ -144,7 +137,7 @@ var Manager;
 		}
 		
 		//set an initial core for servlet
-		Manager.setServlet(shards[3]+'/select');
+		Manager.setServlet(shards[0]+'/select');
 		//To finish this iteration, check if we can talk to Solr using the AbstractManager doRequest API method(use the first shard to search):
 		Manager.doRequest();
 	});

@@ -8,6 +8,19 @@
 
 var Utils = {
 				
+		
+
+		getAllShardsAsSolrParamater : function(shards)
+		{
+			var shardParameterVal = 'localhost:8080/solr/'+shards[0];
+			for(var i=1;i<shards.length;i++){
+				shardParameterVal =  shardParameterVal + ",localhost:8080/solr/"+ shards[i];
+			}
+			return shardParameterVal;
+		},
+		
+		
+		
 		getDomain : function(url)
 		{
 			if(url.match(/:\/\/(.[^/]+)/) == null)

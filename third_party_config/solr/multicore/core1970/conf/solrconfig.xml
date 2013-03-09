@@ -477,20 +477,20 @@
            autowarmCount - the number of entries to prepopulate from
                and old cache.  
       -->
-    <!-- mimis<filterCache class="solr.FastLRUCache"
+	<filterCache class="solr.FastLRUCache"
                  size="512"
                  initialSize="512"
-                 autowarmCount="0"/>-->
+                 autowarmCount="0"/>
 
     <!-- Query Result Cache
          
          Caches results of searches - ordered lists of document ids
          (DocList) based on a query, a sort, and the range of documents requested.  
       -->
-    <!-- mimis<queryResultCache class="solr.LRUCache"
+	<queryResultCache class="solr.LRUCache"
                      size="512"
                      initialSize="512"
-                     autowarmCount="0"/>-->
+                     autowarmCount="0"/>
    
     <!-- Document Cache
 
@@ -498,10 +498,10 @@
          document).  Since Lucene internal document ids are transient,
          this cache will not be autowarmed.  
       -->
-    <!-- mimis<documentCache class="solr.LRUCache"
+	<documentCache class="solr.LRUCache"
                    size="512"
                    initialSize="512"
-                   autowarmCount="0"/>-->
+                   autowarmCount="0"/>
     
     <!-- Field Value Cache
          
