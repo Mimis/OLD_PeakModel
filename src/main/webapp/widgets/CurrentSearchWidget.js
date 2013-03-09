@@ -30,7 +30,7 @@
 			 var q = this.manager.store.get('q').val();
 			    if (q != '*:*') {
 			      links.push($('<a class="badge badge-info" href="#"/>').text('(x) ' + q).click(function () {
-			        self.manager.store.get('q').val('test');
+			        self.manager.store.get('q').val('*:*');
 			        self.doRequest();
 			        return false;
 			      }));

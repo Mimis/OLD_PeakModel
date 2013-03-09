@@ -45,13 +45,13 @@
 	<script type="text/javascript" src="lib/helpers/jquery/ajaxsolr.theme.js"></script>
 	<script type="text/javascript" src="lib/helpers/ajaxsolr.support.js"></script>
     <script type="text/javascript" src="lib/helpers/ajaxsolr.theme.js"></script>
-	<script type="text/javascript" src="lib/widgets/jquery/PagerWidget.js"></script>
 	<script type="text/javascript" src="lib/core/AbstractFacetWidget.js"></script>
+	<script type="text/javascript" src="widgets/DateWidget.js"></script> 		
+	<script type="text/javascript" src="lib/core/ParameterHashStore.js"></script>
 	<script type="text/javascript" src="widgets/TagcloudWidget.js"></script> 
 	<script type="text/javascript" src="widgets/CurrentSearchWidget.js"></script>
 	<script type="text/javascript" src="widgets/TextWidget.js"></script> 
-	<script type="text/javascript" src="widgets/DateWidget.js"></script> 		
-	<script type="text/javascript" src="lib/core/ParameterHashStore.js"></script>
+	<script type="text/javascript" src="lib/widgets/jquery/PagerWidget.js"></script>
 	
 	<!-- Jquery Append -->
 	<script type="text/javascript"> 
@@ -84,7 +84,7 @@
     	    <!-- SEARCH INTERFACE -->
         	<div class="page-header hero-unit">
         	
-        		<form class="form-inline" id="search_form">
+        		<span class="form-inline" id="search_form">
         			<!-- LOGO link -->
         			<a href="/app" id="homepage_link"  title="Go to HomePage"><strong>KB search engine</strong></a>
         			<!-- Search Box and Buttons-->
@@ -95,13 +95,15 @@
         				<input  class="date-query" type=text   placeholder="Enter date"/>
         			</span>
 			      	<button type="submit" class="btn btn-large" id="search_button">Search</button>				  		 
-        		</form>
-        		<!-- CurrentSearchWidget -->
-		      	<span  id="facet_holder" class="offset2"></span>
-        	
-        	
+        		</span>
 			</div>          		
-      
+      	
+      		<div id="facets">
+                <div class="row">
+                    <div id="facet_holder"></div>
+                </div>
+            </div>
+            
         	<div class="row">
         	
         		 <!--  MIMIS-LEFT RESULT DIV -->	        	

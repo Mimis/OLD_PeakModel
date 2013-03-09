@@ -335,3 +335,43 @@ font-size: 180%;
 #panel4 {
 	display: none;
 }
+
+
+/* Facet links */
+.container #facets {
+    background-color: white;
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.2);
+}
+.container #facets #facet_holder {
+    padding: 10px 0;
+    text-align: center;
+}
+.container #facets #facet_holder a {
+    background-color: #41A5D5;
+    padding: 10px;
+    box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.05);
+    padding-right: 35px;
+    margin: 0 5px;
+    color: white;
+    text-shadow: none;
+    position: relative;
+    font-size: 13px;
+}
+.container #facets #facet_holder a span.remove {
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 34px;
+    width: 34px;
+    line-height: 34px;
+    color: white;
+    font-size: 120%;
+}
+
+.container > .content .page-header #facet_holder {
+    clear: both;
+    margin-left: 30%;
+    display: block;
+    line-height: 20px;
+}
+

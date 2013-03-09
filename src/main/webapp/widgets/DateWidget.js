@@ -21,12 +21,9 @@
 					}
 		//			2. else Query ALL Shards
 					else{
-						console.log('SET ALL SHARDS 4 QUERY;date.buton  => emptydate:'+value);
 						Manager.setServlet(self.shards[0]+'/select');
-						console.log("allShards:" + Utils.getAllShardsAsSolrParamater(self.shards));
 						self.manager.store.get('shards').val(Utils.getAllShardsAsSolrParamater(self.shards));
-					    	self.manager.store.get('q').val('ini');
-
+					    self.manager.store.get('q').val('ini');
 						self.manager.doRequest();
 					}
 				}
@@ -45,7 +42,7 @@
 		 * Delete the content of the Target/Search Element after Query!
 		 */
 		afterRequest : function() {
-//			$(this.target).find('input').val('');
+			$(this.target).find('input').val('');
 		}
 	});
 

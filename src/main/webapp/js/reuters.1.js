@@ -34,40 +34,40 @@ var Manager;
 		
 				
 		//PAGINATORS!!!  only BOTTOM
-//		Manager.addWidget(new AjaxSolr.PagerWidget({
-//			id: 'pager2',
-//		    target: '#pager2',
-//		    prevLabel: '&larr; Previous',
-//		    nextLabel: 'Next &rarr;',
-//		    innerWindow: 1,
-//		    mini_sum_results_target: '#mini_result_message'
-//		    //OLD IMPLEMENTATION FOR #mini_result_message
-////		    renderHeader: function (perPage, offset, total) {
-////		    	$('#mini_result_message').html($('<small/>').text('displaying ' + Math.min(total, offset + 1) + ' to ' + Math.min(total, offset + perPage) + ' of ' + total + ' jobs'));
-////		    }
-//		}));
+		Manager.addWidget(new AjaxSolr.PagerWidget({
+			id: 'pager2',
+		    target: '#pager2',
+		    prevLabel: '&larr; Previous',
+		    nextLabel: 'Next &rarr;',
+		    innerWindow: 1,
+		    mini_sum_results_target: '#mini_result_message'
+		    //OLD IMPLEMENTATION FOR #mini_result_message
+//		    renderHeader: function (perPage, offset, total) {
+//		    	$('#mini_result_message').html($('<small/>').text('displaying ' + Math.min(total, offset + 1) + ' to ' + Math.min(total, offset + perPage) + ' of ' + total + ' jobs'));
+//		    }
+		}));
 		
 		
 		/*
 		 * Now, add three TagcloudWidget instances, one for each facet field:
 		 */
-//		var fields = [ 'article_title' ];
-//		for (var i = 0, l = fields.length; i < l; i++) {
-//		  Manager.addWidget(new AjaxSolr.TagcloudWidget({
-//		    id: fields[i],
-//		    target: '#' + fields[i],
-//		    field: fields[i],
-//		    maxLength : 15 //max number of characters to display for each Tag
-//		  }));
-//		}
+		var fields = [ 'article_title' ];
+		for (var i = 0, l = fields.length; i < l; i++) {
+		  Manager.addWidget(new AjaxSolr.TagcloudWidget({
+		    id: fields[i],
+		    target: '#' + fields[i],
+		    field: fields[i],
+		    maxLength : 15 //max number of characters to display for each Tag
+		  }));
+		}
 
 		/*
 		 * Current Search Widjet ; Facet Holder part
 		 */		
-//		Manager.addWidget(new AjaxSolr.CurrentSearchWidget({
-//			id : 'currentsearch',
-//			target : '#facet_holder'
-//		}));
+		Manager.addWidget(new AjaxSolr.CurrentSearchWidget({
+			id : 'currentsearch',
+			target : '#facet_holder'
+		}));
 		
 		/*
 		 * Date Widget -  
