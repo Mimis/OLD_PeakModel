@@ -108,8 +108,6 @@
        configuration.
     -->
   <dataDir>${solr.data.dir:/media/Free/#KB_data/index1950}</dataDir>
-  <!-- old index from 1980-1995 -->
-  <!-- <dataDir>${solr.data.dir:/var/lib/solr}</dataDir> -->
 
   <!-- The DirectoryFactory to use for indexes.
        
@@ -795,7 +793,7 @@
        </str>
        <str name="tie">1.0</str>       
        
-       
+	       
        
      </lst>
     <!-- In addition to defaults, "appends" params can be specified
