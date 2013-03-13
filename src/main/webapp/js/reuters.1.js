@@ -41,10 +41,6 @@ var Manager;
 		    nextLabel: 'Next &rarr;',
 		    innerWindow: 1,
 		    mini_sum_results_target: '#mini_result_message'
-		    //OLD IMPLEMENTATION FOR #mini_result_message
-//		    renderHeader: function (perPage, offset, total) {
-//		    	$('#mini_result_message').html($('<small/>').text('displaying ' + Math.min(total, offset + 1) + ' to ' + Math.min(total, offset + perPage) + ' of ' + total + ' jobs'));
-//		    }
 		}));
 		
 		
@@ -62,7 +58,7 @@ var Manager;
 		}
 
 		/*
-		 * Current Search Widjet ; Facet Holder part
+		 * Current Search Widget ; Facet Holder part
 		 */		
 		Manager.addWidget(new AjaxSolr.CurrentSearchWidget({
 			id : 'currentsearch',
@@ -72,23 +68,23 @@ var Manager;
 		/*
 		 * Date Widget -  
 		 */	
-
 		Manager.addWidget(new AjaxSolr.DateWidget({
 			id : 'date',
 			target : '#date_query',
-			button_target : '#search_form',
 			field : 'date',
-			shards : shards //this are the Shards that we use
+			shards : shards, 
+			form_target : '#search_form',
+			range_target : '#range_query'	
 		}));
 		
 		/*
 		 * Text Widget - Search the 'AllText' field 
 		 */		
-//		Manager.addWidget(new AjaxSolr.TextWidget({
-//			id : 'text',
-//			target : '#keyword_query',
-//			button_target : '#search_form'
-//		}));
+		Manager.addWidget(new AjaxSolr.TextWidget({
+			id : 'text',
+			target : '#keyword_query',
+			form_target : '#search_form'
+		}));
 		
 		
 		

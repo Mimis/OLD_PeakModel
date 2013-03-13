@@ -54,7 +54,7 @@
 			if (links.length > 1) {
 				links.unshift($('<a class="badge badge-info" href="#"/>').text('all(x)').click(
 						function() {
-					        self.manager.store.get('q').val('test');
+					        self.manager.store.get('q').val('*:*');
 					        self.manager.store.remove('fq');
 					        self.doRequest();
 							return false;

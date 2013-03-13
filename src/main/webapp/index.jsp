@@ -79,12 +79,10 @@
 	
     <div class="container">    
     	<div class="content">
-    	
-    	
-    	    <!-- SEARCH INTERFACE -->
+    	    	
         	<div class="page-header hero-unit">
         	
-        		<span class="form-inline" id="search_form">
+        		<form class="form-inline" id="search_form">
         			<!-- LOGO link -->
         			<a href="/app" id="homepage_link"  title="Go to HomePage"><strong>KB search engine</strong></a>
         			<!-- Search Box and Buttons-->
@@ -92,10 +90,13 @@
         				<input  class="search-query" type=text   placeholder="Enter query"/>
         			</span>        			
         			<span id="date_query">
-        				<input  class="date-query" type=text   placeholder="Enter date"/>
+        				<input  class="date-query" type=text   placeholder="Enter year(YYYY)"/>
+        			</span>
+        			<span id="range_query">
+        				<input  class="range-query" type=text   placeholder="Enter duration in years"/>
         			</span>
 			      	<button type="submit" class="btn btn-large" id="search_button">Search</button>				  		 
-        		</span>
+        		</form>
 			</div>          		
       	
       		<div id="facets">

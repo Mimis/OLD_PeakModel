@@ -1,43 +1,44 @@
 (function($) {
 
-	// For a TextWidget that uses the q parameter, see:
-	// https://github.com/evolvingweb/ajax-solr/blob/gh-pages/examples/reuters/widgets/TextWidget.q.js: WE SHOULD USE THE SET FUNCTION
 	AjaxSolr.DateWidget = AjaxSolr.AbstractFacetWidget.extend({
 
 		init : function() {
-			var self = this;
-			//find the element 'input' in the Target element(id="search") - keydown is  when we push enter
-			$(this.target).find('input').bind('keydown', function(e) {
-				if (e.which == 13) {
-					var value = $(this).val();
-		//			1.Get Date if not empty && Is Date format OK?&& isGoodFormat()
-					if(value ){
-						console.log('SET FILTER QUERY + SHARDS;date.buton  => non emptydate:'+value);
-		//				3.Set servlet to coreYYY0 if exist in this.shards
-		//					Manager.setServlet('core'+self.shards[3]+'/select');
-		//				4. Add date filter query
-		//					self.field + ':[date TO date]'
-		//				5.Add additional Shards if exist based on the duration/range
-					}
-		//			2. else Query ALL Shards
-					else{
-						Manager.setServlet(self.shards[0]+'/select');
-						self.manager.store.get('shards').val(Utils.getAllShardsAsSolrParamater(self.shards));
-					    self.manager.store.get('q').val('ini');
-						self.manager.doRequest();
+			var self = this;						
+
+            $(this.form_target).find('button').bind('click', function(e) {
+                var dateValue = $(self.target).find('input').val();
+        		//1.Get Date if not empty && Is in good Date format (YYYY)
+				if(dateValue && dateValue.length == 4 && /^\d+$/.test(dateValue)){
+					//Set servlet to coreYYY0 if exist in this.shards
+					var CoreToUse = 'core' + dateValue.substring(0,3) + '0';
+					if($.inArray(CoreToUse, self.shards) > -1){
+						Manager.setServlet(CoreToUse + '/select');
+						//get date range if any and add it as filter query
+						var rangeDuration =  $(self.range_target).find('input').val();
+						if(rangeDuration){
+							var startYear = dateValue - rangeDuration;
+							var endYear = parseInt(dateValue,10) + parseInt(rangeDuration,10);
+							
+							self.set('[' + startYear + ' TO ' + endYear + ']');
+							//Add additional Shards if exist based on the duration/range
+							console.log('yahooo:'+Utils.getDateQueryShardsAsSolrParamater(startYear+'',endYear+'',self.shards));
+							self.manager.store.get('shards').val(Utils.getDateQueryShardsAsSolrParamater(startYear+'',endYear+'',self.shards));	
+						}
+						//remove shard parameters
+						else{
+							self.manager.store.get('shards').val('');	
+						}
 					}
 				}
-					//			if (value && self.set(value)){
-					//				self.manager.doRequest(0);
-					//			}
-			});
-			//search button				
-//			$(this.button_target).find('button').bind('click', function(e) {
-//				var value = $(self.target).find('input').val();
-//				console.log('date:'+value+" "+self.shards);
-//			});	
+				//2.Query all shards
+				else{
+					Manager.setServlet(self.shards[0]+'/select');
+					self.manager.store.get('shards').val(Utils.getAllShardsAsSolrParamater(self.shards));
+				}
+            });
 		},
-
+		
+		
 		/**
 		 * Delete the content of the Target/Search Element after Query!
 		 */

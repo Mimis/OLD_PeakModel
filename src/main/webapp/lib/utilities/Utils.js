@@ -8,10 +8,28 @@
 
 var Utils = {
 				
-		
 
-		getAllShardsAsSolrParamater : function(shards)
-		{
+		getDateQueryShardsAsSolrParamater : function(startYear,endYear,shards){
+			var startDecade = startYear.substring(0,3) + '0';
+			var endDecade = endYear.substring(0,3) + '0';
+
+			var shardParameterVal = '';
+			while (startDecade != endDecade){
+				var currentShard = 'core' + startDecade;
+				if(shards.indexOf(currentShard) != -1){
+					shardParameterVal = shardParameterVal + 'localhost:8080/solr/' + currentShard + ',';	
+				}
+				startDecade = startDecade.substring(0,2) + (parseInt(startDecade[2],10) + 1) + '0';
+			}	
+			var lastShard = 'core' + endDecade;
+			if(shards.indexOf(lastShard) != -1){
+				shardParameterVal = shardParameterVal + 'localhost:8080/solr/' + lastShard + ',';	
+			}
+			return shardParameterVal.substring(0, shardParameterVal.length - 1);
+		},
+
+
+		getAllShardsAsSolrParamater : function(shards){
 			var shardParameterVal = 'localhost:8080/solr/'+shards[0];
 			for(var i=1;i<shards.length;i++){
 				shardParameterVal =  shardParameterVal + ",localhost:8080/solr/"+ shards[i];

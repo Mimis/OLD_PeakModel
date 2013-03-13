@@ -101,15 +101,15 @@
 		.doc  .doc_content  .right {
 		  float: right;
 		}
-		
-		
 				
 		.container > .content > .page-header > .form-inline > span >  .search-query{
 		  width: 400px;		
 		  height: 35px;		  
 		}
-		.container > .content > .page-header > .form-inline > span >  .date-query{
-		  width: 100px;		
+		
+		.container > .content > .page-header > .form-inline > span > .date-query,
+		.container > .content > .page-header > .form-inline > span > .range-query{
+		  width: 130px;		
 		  height: 35px;		  
 		}
       

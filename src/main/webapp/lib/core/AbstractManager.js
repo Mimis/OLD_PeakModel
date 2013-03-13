@@ -185,7 +185,6 @@ AjaxSolr.AbstractManager = AjaxSolr.Class.extend(
    */
   handleResponse: function (data) {
     this.response = data;
-
     for (var widgetId in this.widgets) {
       this.widgets[widgetId].afterRequest();
     }
