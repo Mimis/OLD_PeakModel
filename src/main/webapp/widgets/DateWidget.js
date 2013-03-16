@@ -25,9 +25,12 @@
 							//Add additional Shards if exist based on the duration/range
 							self.manager.store.get('shards').val(Utils.getDateQueryShardsAsSolrParamater(startYear+'',endYear+'',self.shards));	
 						}
-						//remove shard parameters
+						//remove shard parameters since e will use only one core and add filter query for only the given year 
 						else if(self.isEmpty()){
 							self.manager.store.get('shards').val('');	
+							var startYear = dateValue + '-01-01';
+							var endYear   = dateValue + '-12-31';
+							self.set('[' + startYear + ' TO ' + endYear + ']');
 						}
 					}
 				}
