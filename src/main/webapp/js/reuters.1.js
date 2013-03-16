@@ -47,13 +47,12 @@ var Manager;
 		/*
 		 * Now, add three TagcloudWidget instances, one for each facet field:
 		 */
-		var fields = [ 'article_title' ];
+		var fields = ['article_title', 'date' ];
 		for (var i = 0, l = fields.length; i < l; i++) {
 		  Manager.addWidget(new AjaxSolr.TagcloudWidget({
 		    id: fields[i],
 		    target: '#' + fields[i],
-		    field: fields[i],
-		    maxLength : 15 //max number of characters to display for each Tag
+		    field: fields[i]
 		  }));
 		}
 
@@ -69,7 +68,7 @@ var Manager;
 		 * Date Widget -  
 		 */	
 		Manager.addWidget(new AjaxSolr.DateWidget({
-			id : 'date',
+			id : 'dateFilter',
 			target : '#date_query',
 			field : 'date',
 			shards : shards, 
@@ -121,8 +120,8 @@ var Manager;
 		 */
 		var params = {
 			facet : true,
-			'facet.field' : [ 'article_title'], //These fields are out facet fields
-			'facet.limit' : 10, //display only 10 facet values
+			'facet.field' : ['article_title', 'date'], //These fields are out facet fields
+			'facet.limit' : 100, //display only 10 facet values
 			'facet.offset' : 0,
 			'facet.mincount' : 1,
 			'json.nl' : 'map',

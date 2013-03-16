@@ -107,12 +107,16 @@
 		  height: 35px;		  
 		}
 		
-		.container > .content > .page-header > .form-inline > span > .date-query,
-		.container > .content > .page-header > .form-inline > span > .range-query{
+		.container > .content > .page-header > .form-inline > span > .date-query{
 		  width: 130px;		
 		  height: 35px;		  
 		}
-      
+
+		.container > .content > .page-header > .form-inline > span > .range-query{
+		  width: 65px;		
+		  height: 35px;		  
+		}
+
 	  html, body {
         background-color: #ffff;
       }
@@ -272,8 +276,13 @@
 #search_help {
   font-size: 80%;
 }
-.tagcloud {
+
+
+.tagcloud {	
   padding: 10px 15px 0;
+  /*http://www.quirksmode.org/css/clearing.html  - hack for solving the FLOAT problem of the child elements*/
+  overflow: auto;
+  width: 100%
 }
 .tagcloud_item {
   float: left;
@@ -336,6 +345,11 @@ font-size: 180%;
 	display: none;
 }
 
+/* buttons 4 switching result view*/
+.switch_result_view{
+	text-align: center;
+}
+
 
 /* Facet links */
 .container #facets {
@@ -375,3 +389,11 @@ font-size: 180%;
     line-height: 20px;
 }
 
+
+.container #results-count {
+	background-color: #F7F7F7;
+	box-shadow: 0 0 2px rgba(0, 0, 0, 0.2);
+	padding: 0.4em 0;
+	text-align: center;
+	font-size: 90%;
+}

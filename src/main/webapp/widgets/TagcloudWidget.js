@@ -1,10 +1,12 @@
 (function($) {
 
 	AjaxSolr.TagcloudWidget = AjaxSolr.AbstractFacetWidget.extend({
+		
+		beforeRequest : function() {
+			$(this.target).empty();
+		},
+
 		afterRequest : function() {
-			
-			var textSize = 5;
-			var maxLength = this.maxLength; //max number of characters to display for each Tag
 			
 			/*
 			 * this.manager.response should be familiar from the
@@ -14,7 +16,7 @@
 			 * we are inspecting the facet data for that field in the
 			 * Solr response.
 			 */
-			//in case of the display of te detail pages we dont have any facet count...
+			//in case of the display of the detail pages we dont have any facet count...
 			if (this.manager.response.facet_counts === undefined) {
 				return;
 			}
@@ -23,9 +25,10 @@
 				$(this.target).html(AjaxSolr.theme('no_items_found'));
 				return;
 			}
+			
 
 			/*
-			 * i dont know what he does here
+			 * Sorting the facets..
 			 */
 			var maxCount = 0;
 			var objectedItems = [];
@@ -58,17 +61,8 @@
 				 * request to Solr. For a full list of functions defined
 				 * by AbstractFacetWidget, see the documentation.
 				 */
-				var tag_text = '';
-				tag_text = facet;
-//				if (this.field == "seed_name"){
-//					tag_text = Utils.getFirstCharactersOfUrl(facet, maxLength);
-//				}
-				
-				
-				tag_text = tag_text + '(' + count + ')';
-				$(this.target).append(AjaxSolr.theme('tag', tag_text ,textSize, this.clickHandler(facet)));
-//				$(this.target).append(AjaxSolr.theme('tag', tag_text ,parseInt(objectedItems[i].count/ maxCount * 10), this.clickHandler(facet)));
-				$(this.target).append('<br/>');
+				var tag_text = facet + '(' + count + ')';
+				$(this.target).append(AjaxSolr.theme('tag', tag_text ,parseInt(count/ maxCount * 10), this.clickHandler(facet)));
 			}
 		}
 	});

@@ -7,6 +7,8 @@
 
             $(this.form_target).find('button').bind('click', function(e) {
                 var dateValue = $(self.target).find('input').val();
+                
+                
         		//1.Get Date if not empty && Is in good Date format (YYYY)
 				if(dateValue && dateValue.length == 4 && /^\d+$/.test(dateValue)){
 					//Set servlet to coreYYY0 if exist in this.shards
@@ -21,17 +23,16 @@
 							
 							self.set('[' + startYear + ' TO ' + endYear + ']');
 							//Add additional Shards if exist based on the duration/range
-							console.log('yahooo:'+Utils.getDateQueryShardsAsSolrParamater(startYear+'',endYear+'',self.shards));
 							self.manager.store.get('shards').val(Utils.getDateQueryShardsAsSolrParamater(startYear+'',endYear+'',self.shards));	
 						}
 						//remove shard parameters
-						else{
+						else if(self.isEmpty()){
 							self.manager.store.get('shards').val('');	
 						}
 					}
 				}
 				//2.Query all shards
-				else{
+				else if(self.isEmpty()){
 					Manager.setServlet(self.shards[0]+'/select');
 					self.manager.store.get('shards').val(Utils.getAllShardsAsSolrParamater(self.shards));
 				}
@@ -44,6 +45,7 @@
 		 */
 		afterRequest : function() {
 			$(this.target).find('input').val('');
+			$(this.range_target).find('input').val('');
 		}
 	});
 

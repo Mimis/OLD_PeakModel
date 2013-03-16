@@ -55,17 +55,48 @@
 	
 	<!-- Jquery Append -->
 	<script type="text/javascript"> 
-		$(document).ready(function(){ 						
+		$(document).ready(function(){ 	
+							
+			
+			//SWITCH RESULT VIEW BUTTONS
+			$(".show_classic_view_but").click(function(){
+				$('.wordCloud_result_view').hide('fast');		
+				$('.classic_result_view').show('fast');
+				
+				$('.show_classic_view_but').addClass('disabled');
+				$('.show_wordCloud_view_but').removeClass('disabled');
+				return false;
+			});
+			
+			$(".show_wordCloud_view_but").click(function(){						    		     		    
+				$('.classic_result_view').hide('fast');
+				$('.wordCloud_result_view').show('fast');
+				
+				$('.show_wordCloud_view_but').addClass('disabled');
+				$('.show_classic_view_but').removeClass('disabled');
+				return false;
+			});
+			//Default result view is the classic one;hide rest by deafult
+			$('.wordCloud_result_view').hide('fast');
+			$('.show_classic_view_but').addClass('disabled');
+			
+			
+			
+			//tag cloud on classic result list
 			$(".show_resources2").click(function(){
 				$("#panel2").slideToggle("slow");
 				$(this).toggleClass("active"); 
 				return false;
 			});
-
-			//WE EXTEND BY DEFAULT THIS RESOURCE
-			$("#panel2").slideToggle("slow");
-			$(this).toggleClass("active"); 
-		    		     		    
+			$(".show_resources3").click(function(){
+				$("#panel3").slideToggle("slow");
+				$(this).toggleClass("active"); 
+				return false;
+			});
+			$("#panel2").slideToggle("slow"); 
+			$("#panel3").slideToggle("slow");
+			$(this).toggleClass("active");	
+		
 		});
 	</script> 		
 </head>
@@ -76,12 +107,13 @@
 
 
 <body>
-	
     <div class="container">    
     	<div class="content">
     	    	
+    	    <!--         
+			  ** THIS THE PAGE HEADER WHERE SEARCH INTERFACE EXISTS **
+			-->
         	<div class="page-header hero-unit">
-        	
         		<form class="form-inline" id="search_form">
         			<!-- LOGO link -->
         			<a href="/app" id="homepage_link"  title="Go to HomePage"><strong>KB search engine</strong></a>
@@ -90,75 +122,81 @@
         				<input  class="search-query" type=text   placeholder="Enter query"/>
         			</span>        			
         			<span id="date_query">
-        				<input  class="date-query" type=text   placeholder="Enter year(YYYY)"/>
+        				<input  class="date-query" type=text   placeholder="Year(YYYY)"/>
         			</span>
         			<span id="range_query">
-        				<input  class="range-query" type=text   placeholder="Enter duration in years"/>
+        				<input  class="range-query" type=text   placeholder="Range(Y)"/>
         			</span>
 			      	<button type="submit" class="btn btn-large" id="search_button">Search</button>				  		 
         		</form>
+        		
+        		<!-- BUTTONS TO CHANGE RESULT VIEW-->
+        		<div class="switch_result_view">
+				  <button class="btn show_classic_view_but" type="button">Show Classic View</button>
+				  <button class="btn show_wordCloud_view_but" type="button">Show WordCloud View</button>
+				</div>
 			</div>          		
-      	
+      		<!--         
+			  ** HERE WE SHOW THE CURRENT QUERY PARAMETERS(FACETS) **
+			-->
       		<div id="facets">
                 <div class="row">
                     <div id="facet_holder"></div>
                 </div>
             </div>
             
-        	<div class="row">
-        	
-        		 <!--  MIMIS-LEFT RESULT DIV -->	        	
-	            <div class="span10" id="result_list">
+			<!-- display number of total results -->            
+            <div id="results-count">
+				<div id="mini_result_message" class="muted">&nbsp;</div>
+			</div>
+            
+            
+            
+			<!--         
+			  ** THIS THE CLASSIC RESULT SET WITH PAGINATION **
+			-->
+        	<div class="row classic_result_view">
+        	    <div class="span12" id="result_list">
 					<div class="left">
-					
-						<!-- <div id="result"> -->
-						
-							<!-- display number of total results -->
-							<div id="mini_result_message" class="muted"></div>
-							
-							<!-- RESULTS ELEMENT -->
-							<div id="docs"></div>
-							
-							<!-- PAGINATION botom -->
-							<div class="pagination pagination-centered" id="navigation">
-								<ul id="pager2"></ul>
-							</div>
-							
-						<!-- </div> -->
-					</div>
-					<!-- <!-- ONLY FOR TEST - go to given page -->
-					<!-- <div id="goToPage"></div> --> 
-						
-				</div>
-        		
-		      
-		        <!--  MIMIS-RIGHT DIV -->
-	        	<div class="span4">
-	        	   
-	        	    <div class="right">
-						
-
-						<!-- ATTENTION IN CASE WE CHANGE THE SOLR VARIABLES WE HAVE TO CHANGE THESE ONES ALSO(I.E. here we change the id from "form_url" to "resource_url") 				-->
-						<h3 class="show_resources2">Title</h3>
-						<div id="panel2">
-							<div class="tagcloud hero-unit" id="article_title"></div>
+						<!-- RESULTS ELEMENT -->
+						<div id="docs"></div>
+						<!-- PAGINATION botom -->
+						<div class="pagination pagination-centered" id="navigation">
+							<ul id="pager2"></ul>
 						</div>
-						
-						<div class="clear"></div>
 					</div>
-					<div class="clear"></div>
-	        	</div>
- 
-		               	
-        		
+				</div>
 	        </div>
+	        
+	        
+	        <!--         
+			  ** THIS THE WORD CLOUD RESULT SET FOR THE CURRENT SEARCH **
+			-->
+        	<div class="row-fluid wordCloud_result_view">
+		    	<div class="span12">
+		    		<div class="facet">
+		    		    <h3 class="show_resources2">Title Word Cloud</h3>
+						<div id="panel2">
+							<div class="tagcloud" id="article_title"></div>
+						</div>
+					</div>
+					<div class="facet">
+						<h3 class="show_resources3">Date Cloud</h3>
+						<div id="panel3">
+							<div class="tagcloud" id="date"></div>
+						</div>
+					</div>		
+	        	</div>
+	        </div>
+	        
       </div>
 
+
+		
       <footer>
         <p>&copy; KB 2013</p>
       </footer>
-
-    </div> <!-- /container -->
+    </div> 
 
 </body>
 </html>
