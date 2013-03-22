@@ -47,10 +47,10 @@
 	};
 	
 	/**
-	 * Ajac loader html code
+	 * Ajax loader html code
 	 */
 	AjaxSolr.theme.prototype.ajax_loader = function() {
-		var ajax_loader_html =  '<div id="loader" class="span10" style="line-height: 115px; text-align: center; padding-top: 300px;">';
+		var ajax_loader_html =  '<div id="loader" style="line-height: 115px; text-align: center; padding-top: 100px;">';
 		ajax_loader_html +=    		'<img width="35" height="35" src="images/ajax-loader.gif">';
 		ajax_loader_html +=     '</div>'
 	   	return ajax_loader_html;
@@ -217,18 +217,13 @@
 		return submitFeedback;
 	};
 	
-	
-	
-	
-
-	
+		
 	
 	/**
 	 * Tag links theme
 	 */
 	AjaxSolr.theme.prototype.tag = function(value, weight, handler) {
-		return $('<a href="#" class="tagcloud_item"/>').text(value).addClass(
-				'tagcloud_size_' + weight).click(handler);
+		return $('<a href="#" class="tagcloud_item"/>').text(value).addClass('tagcloud_size_' + weight).click(handler);
 	};
 
 

@@ -10,7 +10,7 @@ var Manager;
 		
 		//this our all the shards
 		var shards = [ 'core1950','core1960','core1970','core1980','core1990'];
-		
+
 		//In AJAX Solr, the Manager sends these requests, and passes the responses to each widget for handling.
 		Manager = new AjaxSolr.Manager({
 			//set url: http://groups.google.com/group/ajax-solr/browse_thread/thread/2e7c6f359234cc59/d2cff193e02fd9cd?lnk=gst&q=solrUrl#d2cff193e02fd9cd
@@ -56,7 +56,7 @@ var Manager;
 		var fields = ['article_title' ];
 		for (var i = 0, l = fields.length; i < l; i++) {
 		  Manager.addWidget(new AjaxSolr.TagcloudWidget({
-		    id: 'wordCloud_' + fields[i],
+		    id: 'tagcloud' + fields[i],
 		    target: '#' + fields[i],
 		    field: fields[i]
 		  }));
@@ -122,7 +122,7 @@ var Manager;
 		Manager.init();
 		
 		//use the ParameterStore addByValue API method right now to build a basic query
-		Manager.store.addByValue('q', '*:*');
+		Manager.store.addByValue('q', 'democratie');
 //		sort by extraction date:
 //		Manager.store.addByValue('sort', 'extraction_date desc');
 		//sort by score...example

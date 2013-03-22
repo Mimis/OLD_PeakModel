@@ -27,6 +27,10 @@
    	<script type="text/javascript" src="js/bootstrap/bootstrap.min.js"></script>
     <!-- BOOTSTRAP TWITTER END -->
     
+
+   	<script type="text/javascript" src="js/jQCloud/jqcloud.js"></script>
+    <link href="./css/jqcloud.css" rel="stylesheet">
+
     
     <script type="text/javascript" src="lib/utilities/Utils.js"></script>
 	<link rel="stylesheet" type="text/css" href="css/reuters.css" media="screen" />

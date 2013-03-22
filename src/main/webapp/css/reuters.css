@@ -278,11 +278,19 @@
 }
 
 
+/*
+ Time Series Graph 
+*/
+.timeGraph {
+	height: 350px;
+}
+
 .tagcloud {	
   padding: 10px 15px 0;
   /*http://www.quirksmode.org/css/clearing.html  - hack for solving the FLOAT problem of the child elements*/
   overflow: auto;
-  width: 100%
+  width: 100%; 
+  height: 350px;
 }
 .tagcloud_item {
   float: left;
@@ -399,10 +407,4 @@ font-size: 180%;
 }
 
 
-/*
- Time Series Graph 
-*/
-.timeGraph {
-	height: 300px;
-}
 

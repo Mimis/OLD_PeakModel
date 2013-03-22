@@ -7,6 +7,9 @@
 		},
 
 		afterRequest : function() {
+			// empty the Html target element
+			$(this.target).empty();
+
 			//in case of the display of the detail pages we dont have any facet count...
 			if (this.manager.response.facet_counts === undefined) {
 				return;
@@ -16,8 +19,6 @@
 				$(this.target).html(AjaxSolr.theme('no_items_found'));
 				return;
 			}
-			// empty the Html target element
-			$(this.target).empty();
 			
             morrisTemplate = {
                     element: this.field,
