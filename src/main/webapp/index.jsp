@@ -48,38 +48,44 @@
 	<script type="text/javascript" src="lib/core/AbstractFacetWidget.js"></script>
 	<script type="text/javascript" src="widgets/DateWidget.js"></script> 		
 	<script type="text/javascript" src="lib/core/ParameterHashStore.js"></script>
-	<script type="text/javascript" src="widgets/TagcloudWidget.js"></script> 
+	<script type="text/javascript" src="widgets/TagcloudWidget.js"></script>
+	<script type="text/javascript" src="widgets/TimeSeriesGraphWidget.js"></script>
 	<script type="text/javascript" src="widgets/CurrentSearchWidget.js"></script>
 	<script type="text/javascript" src="widgets/TextWidget.js"></script> 
 	<script type="text/javascript" src="lib/widgets/jquery/PagerWidget.js"></script>
+	<script type="text/javascript" src="widgets/ShowResultInfoWidget.js"></script>
 	
+	<!-- morris js graphs -->
+	<link rel="stylesheet" href="http://cdn.oesmith.co.uk/morris-0.4.1.min.css">
+   	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+   	<script type="text/javascript" src="http://cdn.oesmith.co.uk/morris-0.4.1.min.js"></script>
+    	
 	<!-- Jquery Append -->
 	<script type="text/javascript"> 
 		$(document).ready(function(){ 	
 							
 			
 			//SWITCH RESULT VIEW BUTTONS
-			$(".show_classic_view_but").click(function(){
-				$('.wordCloud_result_view').hide('fast');		
-				$('.classic_result_view').show('fast');
-				
-				$('.show_classic_view_but').addClass('disabled');
-				$('.show_wordCloud_view_but').removeClass('disabled');
-				return false;
-			});
-			
-			$(".show_wordCloud_view_but").click(function(){						    		     		    
-				$('.classic_result_view').hide('fast');
-				$('.wordCloud_result_view').show('fast');
-				
-				$('.show_wordCloud_view_but').addClass('disabled');
-				$('.show_classic_view_but').removeClass('disabled');
-				return false;
-			});
-			//Default result view is the classic one;hide rest by deafult
-			$('.wordCloud_result_view').hide('fast');
-			$('.show_classic_view_but').addClass('disabled');
-			
+<!--			$(".show_classic_view_but").click(function(){-->
+<!--				$('.wordCloud_result_view').hide('fast');		-->
+<!--				$('.classic_result_view').show('fast');-->
+<!--				-->
+<!--				$('.show_classic_view_but').addClass('disabled');-->
+<!--				$('.show_wordCloud_view_but').removeClass('disabled');-->
+<!--				return false;-->
+<!--			});-->
+<!--			-->
+<!--			$(".show_wordCloud_view_but").click(function(){						    		     		    -->
+<!--				$('.classic_result_view').hide('fast');-->
+<!--				$('.wordCloud_result_view').show('fast');-->
+<!--				-->
+<!--				$('.show_wordCloud_view_but').addClass('disabled');-->
+<!--				$('.show_classic_view_but').removeClass('disabled');-->
+<!--				return false;-->
+<!--			});-->
+<!--			//Default result view is the Semantic one;hide rest by default-->
+<!--			$('.classic_result_view').hide('fast');-->
+<!--			$('.show_wordCloud_view_but').addClass('disabled');-->
 			
 			
 			//tag cloud on classic result list
@@ -116,7 +122,7 @@
         	<div class="page-header hero-unit">
         		<form class="form-inline" id="search_form">
         			<!-- LOGO link -->
-        			<a href="/app" id="homepage_link"  title="Go to HomePage"><strong>KB search engine</strong></a>
+        			<a href="/semantic" id="homepage_link"  title="Go to HomePage"><strong>KB search engine</strong></a>
         			<!-- Search Box and Buttons-->
         			<span id="keyword_query">
         				<input  class="search-query" type=text   placeholder="Enter query"/>
@@ -131,10 +137,10 @@
         		</form>
         		
         		<!-- BUTTONS TO CHANGE RESULT VIEW-->
-        		<div class="switch_result_view">
-				  <button class="btn show_classic_view_but" type="button">Show Classic View</button>
-				  <button class="btn show_wordCloud_view_but" type="button">Show WordCloud View</button>
-				</div>
+<!--        		<div class="switch_result_view">-->
+<!--				  <button class="btn show_classic_view_but" type="button">Show Classic View</button>-->
+<!--				  <button class="btn show_wordCloud_view_but" type="button">Show Semantic View</button>-->
+<!--				</div>-->
 			</div>          		
       		<!--         
 			  ** HERE WE SHOW THE CURRENT QUERY PARAMETERS(FACETS) **
@@ -155,22 +161,20 @@
 			<!--         
 			  ** THIS THE CLASSIC RESULT SET WITH PAGINATION **
 			-->
-        	<div class="row classic_result_view">
-        	    <div class="span12" id="result_list">
-					<div class="left">
-						<!-- RESULTS ELEMENT -->
-						<div id="docs"></div>
-						<!-- PAGINATION botom -->
-						<div class="pagination pagination-centered" id="navigation">
-							<ul id="pager2"></ul>
-						</div>
-					</div>
-				</div>
-	        </div>
+<!--        	<div class="row classic_result_view">-->
+<!--        	    <div class="span12" id="result_list">-->
+<!--					<div class="left">-->
+<!--						<div id="docs"></div>-->
+<!--						<div class="pagination pagination-centered" id="navigation">-->
+<!--							<ul id="pager2"></ul>-->
+<!--						</div>-->
+<!--					</div>					-->
+<!--				</div>-->
+<!--	        </div>-->
 	        
 	        
 	        <!--         
-			  ** THIS THE WORD CLOUD RESULT SET FOR THE CURRENT SEARCH **
+			  ** THIS THE SEMANTIC(world cloud,charts) RESULT SET FOR THE CURRENT SEARCH **
 			-->
         	<div class="row-fluid wordCloud_result_view">
 		    	<div class="span12">
@@ -181,14 +185,13 @@
 						</div>
 					</div>
 					<div class="facet">
-						<h3 class="show_resources3">Date Cloud</h3>
+						<h3 class="show_resources3">Date Graph</h3>
 						<div id="panel3">
-							<div class="tagcloud" id="date"></div>
+							<div class="timeGraph" id="date"></div>
 						</div>
-					</div>		
+					</div>
 	        	</div>
 	        </div>
-	        
       </div>
 
 

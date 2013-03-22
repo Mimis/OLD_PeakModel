@@ -3,7 +3,7 @@
 	AjaxSolr.TagcloudWidget = AjaxSolr.AbstractFacetWidget.extend({
 		
 		beforeRequest : function() {
-			$(this.target).empty();
+			$(this.target).html(AjaxSolr.theme('ajax_loader'));		
 		},
 
 		afterRequest : function() {

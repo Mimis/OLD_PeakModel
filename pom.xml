@@ -86,7 +86,7 @@
             </plugin>
         </plugins>
         
-        <finalName>app</finalName>
+        <finalName>semantic</finalName>
         
     </build>
 

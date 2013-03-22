@@ -26,7 +26,7 @@
 							self.manager.store.get('shards').val(Utils.getDateQueryShardsAsSolrParamater(startYear+'',endYear+'',self.shards));	
 						}
 						//remove shard parameters since e will use only one core and add filter query for only the given year 
-						else if(self.isEmpty()){
+						else { //if(self.isEmpty()){
 							self.manager.store.get('shards').val('');	
 							var startYear = dateValue + '-01-01';
 							var endYear   = dateValue + '-12-31';
@@ -35,7 +35,7 @@
 					}
 				}
 				//2.Query all shards
-				else if(self.isEmpty()){
+				else {//if(self.isEmpty()){
 					Manager.setServlet(self.shards[0]+'/select');
 					self.manager.store.get('shards').val(Utils.getAllShardsAsSolrParamater(self.shards));
 				}

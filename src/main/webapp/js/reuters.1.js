@@ -18,44 +18,62 @@ var Manager;
 		});
  
 
+			//NOT IN USE FOR SEMANTIC VIEW
+//		/**
+//		 * Any widget inheriting from AbstractFacetWidget takes a required field property, 
+//		 * identifying the facet field the widget will handle. Note that, in our example, 
+//		 * the target HTML element is conveniently named after the Solr field. This may not 
+//		 * be the case in your application; set your field property accordingly.
+//		 * 
+//		 */
+//		//Before we define any methods on the widget, let’s add an instance of the widget to the Manager in reuters.js:
+//		Manager.addWidget(new AjaxSolr.ResultWidget({
+//			id : 'result',    //Every widget takes a required id, to identify the widget, and an optional target
+//			target : '#docs'  //The target is usually the CSS selector for the HTML element that the widget updates after each Solr request.
+//		}));
+//		
+//				
+//		//PAGINATORS!!!  only BOTTOM
+//		Manager.addWidget(new AjaxSolr.PagerWidget({
+//			id: 'pager2',
+//		    target: '#pager2',
+//		    prevLabel: '&larr; Previous',
+//		    nextLabel: 'Next &rarr;',
+//		    innerWindow: 1,
+//		    mini_sum_results_target: '#mini_result_message'
+//		}));
+		
 
-		/**
-		 * Any widget inheriting from AbstractFacetWidget takes a required field property, 
-		 * identifying the facet field the widget will handle. Note that, in our example, 
-		 * the target HTML element is conveniently named after the Solr field. This may not 
-		 * be the case in your application; set your field property accordingly.
-		 * 
-		 */
-		//Before we define any methods on the widget, let’s add an instance of the widget to the Manager in reuters.js:
-		Manager.addWidget(new AjaxSolr.ResultWidget({
-			id : 'result',    //Every widget takes a required id, to identify the widget, and an optional target
-			target : '#docs'  //The target is usually the CSS selector for the HTML element that the widget updates after each Solr request.
+		
+		Manager.addWidget(new AjaxSolr.ShowResultInfoWidget({
+			id: 'showResults',
+		    target: '#mini_result_message'
 		}));
-		
-				
-		//PAGINATORS!!!  only BOTTOM
-		Manager.addWidget(new AjaxSolr.PagerWidget({
-			id: 'pager2',
-		    target: '#pager2',
-		    prevLabel: '&larr; Previous',
-		    nextLabel: 'Next &rarr;',
-		    innerWindow: 1,
-		    mini_sum_results_target: '#mini_result_message'
-		}));
-		
-		
+
 		/*
 		 * Now, add three TagcloudWidget instances, one for each facet field:
 		 */
-		var fields = ['article_title', 'date' ];
+		var fields = ['article_title' ];
 		for (var i = 0, l = fields.length; i < l; i++) {
 		  Manager.addWidget(new AjaxSolr.TagcloudWidget({
-		    id: fields[i],
+		    id: 'wordCloud_' + fields[i],
 		    target: '#' + fields[i],
 		    field: fields[i]
 		  }));
 		}
 
+		/*
+		 * Time Series GraphWidget
+		 */
+		var graphFields = [ 'date' ];
+		for (var i = 0, l = graphFields.length; i < l; i++) {
+		  Manager.addWidget(new AjaxSolr.TimeSeriesGraphWidget({
+		    id: 'graph_' + graphFields[i],
+		    target: '#' + graphFields[i],
+		    field: graphFields[i]
+		  }));
+		}
+		
 		/*
 		 * Current Search Widget ; Facet Holder part
 		 */		
@@ -65,7 +83,7 @@ var Manager;
 		}));
 		
 		/*
-		 * Date Widget -  
+		 * Date Search Widget -  
 		 */	
 		Manager.addWidget(new AjaxSolr.DateWidget({
 			id : 'dateFilter',
@@ -77,7 +95,7 @@ var Manager;
 		}));
 		
 		/*
-		 * Text Widget - Search the 'AllText' field 
+		 * Text Search Widget 
 		 */		
 		Manager.addWidget(new AjaxSolr.TextWidget({
 			id : 'text',
@@ -125,7 +143,7 @@ var Manager;
 			'facet.offset' : 0,
 			'facet.mincount' : 1,
 			'json.nl' : 'map',
-			'rows' : 10   //THIS IS THE NUMBER OF RESULTS THAT WE RETURN EVERY QUERY
+			'rows' : '0'   //THIS IS THE NUMBER OF RESULTS THAT WE RETURN EVERY QUERY
 		};
 		for ( var name in params) {
 			Manager.store.addByValue(name, params[name]);

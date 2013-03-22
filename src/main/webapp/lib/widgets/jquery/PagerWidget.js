@@ -338,7 +338,6 @@ AjaxSolr.PagerWidget = AjaxSolr.AbstractWidget.extend(
 	
   }
   
-  
 });
 
 })(jQuery);

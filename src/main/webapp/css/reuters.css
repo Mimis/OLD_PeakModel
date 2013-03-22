@@ -397,3 +397,12 @@ font-size: 180%;
 	text-align: center;
 	font-size: 90%;
 }
+
+
+/*
+ Time Series Graph 
+*/
+.timeGraph {
+	height: 300px;
+}
+
