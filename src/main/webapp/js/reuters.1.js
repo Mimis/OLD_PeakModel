@@ -51,7 +51,7 @@ var Manager;
 		}));
 
 		/*
-		 * Now, add three TagcloudWidget instances, one for each facet field:
+		 * TagcloudWidget
 		 */
 		var fields = ['article_title' ];
 		for (var i = 0, l = fields.length; i < l; i++) {
@@ -64,15 +64,21 @@ var Manager;
 
 		/*
 		 * Time Series GraphWidget
-		 */
-		var graphFields = [ 'date' ];
-		for (var i = 0, l = graphFields.length; i < l; i++) {
-		  Manager.addWidget(new AjaxSolr.TimeSeriesGraphWidget({
-		    id: 'graph_' + graphFields[i],
-		    target: '#' + graphFields[i],
-		    field: graphFields[i]
-		  }));
-		}
+		 */	
+		Manager.addWidget(new AjaxSolr.TimeSeriesGraphWidget({
+			id: 'graph_date',
+			target: 'date',
+			field: 'date',
+			parseTime:true
+		}));
+		Manager.addWidget(new AjaxSolr.TimeSeriesGraphWidget({
+			id: 'graph_title',
+			target: 'tf-rank',
+			field: 'article_title',
+			parseTime:false
+		}));
+		
+		
 		
 		/*
 		 * Current Search Widget ; Facet Holder part

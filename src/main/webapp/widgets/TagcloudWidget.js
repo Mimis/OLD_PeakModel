@@ -17,26 +17,32 @@
 				$(this.target).html(AjaxSolr.theme('no_items_found'));
 				return;
 			}
-			//get all values into an array 
+			
+			var q = this.manager.response.responseHeader.params.q;
+			//[EXCLUDE QUERY 'Q']get all values into an array in order to get the MAximum frequency(needs for cloud weight)
 			var arr = Object.keys( Manager.response.facet_counts.facet_fields.article_title ).map(
 				function ( key ) { 
-					return Manager.response.facet_counts.facet_fields.article_title[key]; 
+					if(key !== q) {return Manager.response.facet_counts.facet_fields.article_title[key]}
+					else {return false;}
 				}
 			);
-			var maxCount = Math.max.apply( null, arr );
+			var maxCount = Math.max.apply( null, arr );			
+			
 			var objectedItems = [];
 			for ( var facet in this.manager.response.facet_counts.facet_fields[this.field]) {
-				var count = parseInt(this.manager.response.facet_counts.facet_fields[this.field][facet]);
-				//var tag_text = facet + '(' + count + ')';
-				objectedItems.push({
-					text : facet, 
-					weight : parseInt(count/ maxCount * 10), 
-					handlers: {click: this.clickHandler(facet)}
-				});
+				if(facet !== q){
+					var count = parseInt(this.manager.response.facet_counts.facet_fields[this.field][facet]);
+					//var tag_text = facet + '(' + count + ')';
+					objectedItems.push({
+						text : facet, 
+						weight : parseInt(count/ maxCount * 10), 
+						handlers: {click: this.clickHandler(facet)}
+					});
+				}
 			}
-			// empty the Html target element
+			// empty the Html target element and construct the Cloud
 			$(this.target).empty();
-		    	$(this.target).jQCloud(objectedItems);			
+		    $(this.target).jQCloud(objectedItems);			
 		}
 	});
 

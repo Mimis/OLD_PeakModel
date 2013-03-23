@@ -103,8 +103,14 @@
 				$(this).toggleClass("active"); 
 				return false;
 			});
+			$(".show_resources4").click(function(){
+				$("#panel4").slideToggle("slow");
+				$(this).toggleClass("active"); 
+				return false;
+			});
 			$("#panel2").slideToggle("slow"); 
 			$("#panel3").slideToggle("slow");
+			$("#panel4").slideToggle("slow");
 			$(this).toggleClass("active");	
 		
 		});
@@ -189,8 +195,14 @@
 						</div>
 					</div>
 					<div class="facet">
-						<h3 class="show_resources3">Date Graph</h3>
+						<h3 class="show_resources3">Term Frequency Ranking Graph</h3>
 						<div id="panel3">
+							<div class="timeGraph" id="tf-rank"></div>
+						</div>
+					</div>
+					<div class="facet">
+						<h3 class="show_resources4">Article Date Graph</h3>
+						<div id="panel4">
 							<div class="timeGraph" id="date"></div>
 						</div>
 					</div>
