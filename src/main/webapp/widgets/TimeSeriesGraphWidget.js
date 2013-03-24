@@ -14,7 +14,6 @@
 			if (this.manager.response.facet_counts === undefined) {
 				return;
 			}
-			
 			if (this.manager.response.facet_counts.facet_fields[this.field] === undefined) {
 				$('#'+this.target).html(AjaxSolr.theme('no_items_found'));
 				return;

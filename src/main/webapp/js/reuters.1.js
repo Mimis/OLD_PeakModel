@@ -51,16 +51,23 @@ var Manager;
 		}));
 
 		/*
-		 * TagcloudWidget
+		 * Raw Term Frequency TagcloudWidget
 		 */
-		var fields = ['article_title' ];
-		for (var i = 0, l = fields.length; i < l; i++) {
-		  Manager.addWidget(new AjaxSolr.TagcloudWidget({
-		    id: 'tagcloud' + fields[i],
-		    target: '#' + fields[i],
-		    field: fields[i]
-		  }));
-		}
+		Manager.addWidget(new AjaxSolr.RawTF_TagcloudWidget({
+		    id: 'article_tagcloud',
+		    target: '#raw_article_title',
+		    field: 'article_title'
+		}));
+		
+		/*
+		 * Inverse Document Frequency Tag Cloud
+		 */
+		Manager.addWidget(new AjaxSolr.IDF_TagcloudWidget({
+		    id: 'article_idf_tagcloud',
+		    target: '#idf_article_title',
+		    field: 'article_title',
+		    totalNrDocs: 29470132 //this is the total number of dicument in our collection
+		}));
 
 		/*
 		 * Time Series GraphWidget

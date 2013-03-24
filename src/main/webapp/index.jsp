@@ -52,7 +52,8 @@
 	<script type="text/javascript" src="lib/core/AbstractFacetWidget.js"></script>
 	<script type="text/javascript" src="widgets/DateWidget.js"></script> 		
 	<script type="text/javascript" src="lib/core/ParameterHashStore.js"></script>
-	<script type="text/javascript" src="widgets/TagcloudWidget.js"></script>
+	<script type="text/javascript" src="widgets/RawTF_TagcloudWidget.js"></script>
+	<script type="text/javascript" src="widgets/IDF_TagcloudWidget.js"></script>
 	<script type="text/javascript" src="widgets/TimeSeriesGraphWidget.js"></script>
 	<script type="text/javascript" src="widgets/CurrentSearchWidget.js"></script>
 	<script type="text/javascript" src="widgets/TextWidget.js"></script> 
@@ -93,6 +94,11 @@
 			
 			
 			//tag cloud on classic result list
+			$(".show_resources1").click(function(){
+				$("#panel1").slideToggle("slow");
+				$(this).toggleClass("active"); 
+				return false;
+			});
 			$(".show_resources2").click(function(){
 				$("#panel2").slideToggle("slow");
 				$(this).toggleClass("active"); 
@@ -108,6 +114,7 @@
 				$(this).toggleClass("active"); 
 				return false;
 			});
+			$("#panel1").slideToggle("slow");
 			$("#panel2").slideToggle("slow"); 
 			$("#panel3").slideToggle("slow");
 			$("#panel4").slideToggle("slow");
@@ -189,13 +196,19 @@
         	<div class="row-fluid wordCloud_result_view">
 		    	<div class="span12">
 		    		<div class="facet">
-		    		    <h3 class="show_resources2">Title Word Cloud</h3>
-						<div id="panel2">
-							<div class="tagcloud" id="article_title"></div>
+		    		    <h3 class="show_resources1">Title Raw Term Frequency Word Cloud</h3>
+						<div id="panel1">
+							<div class="tagcloud" id="raw_article_title"></div>
 						</div>
 					</div>
 					<div class="facet">
-						<h3 class="show_resources3">Term Frequency Ranking Graph</h3>
+		    		    <h3 class="show_resources2">Title Inverse Document Frequency Word Cloud</h3>
+						<div id="panel2">
+							<div class="tagcloud" id="idf_article_title"></div>
+						</div>
+					</div>
+					<div class="facet">
+						<h3 class="show_resources3">Title Term Frequency Graph</h3>
 						<div id="panel3">
 							<div class="timeGraph" id="tf-rank"></div>
 						</div>
