@@ -1,7 +1,3 @@
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
-
-
-
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
    "http://www.w3.org/TR/html4/loose.dtd">
 
@@ -196,29 +192,40 @@
         	<div class="row-fluid wordCloud_result_view">
 		    	<div class="span12">
 		    		<div class="facet">
-		    		    <h3 class="show_resources1">Title Raw Term Frequency Word Cloud</h3>
+		    		    <h3 class="show_resources1">Most frequent Title Term Doc Frequency Word Cloud</h3>
 						<div id="panel1">
-							<div class="tagcloud" id="raw_article_title"></div>
+							<div class="tagcloud" id="raw_asc_article_title"></div>
 						</div>
 					</div>
+
 					<div class="facet">
-		    		    <h3 class="show_resources2">Title Inverse Document Frequency Word Cloud</h3>
+				    	<h3 class="show_resources2">Less frequent Title Term Doc Frequency Word Cloud</h3>
 						<div id="panel2">
-							<div class="tagcloud" id="idf_article_title"></div>
+							<div class="tagcloud" id="raw_desc_article_title"></div>
 						</div>
 					</div>
+					
 					<div class="facet">
-						<h3 class="show_resources3">Title Term Frequency Graph</h3>
+						<h3 class="show_resources5">Number of Articles per Month Graph</h3>
+						<div id="panel5">
+							<div class="timeGraph" id="date"></div>
+						</div>
+					</div>
+
+					<div class="facet">
+						<h3 class="show_resources3">Most frequent Title Term Frequency Graph</h3>
 						<div id="panel3">
 							<div class="timeGraph" id="tf-rank"></div>
 						</div>
 					</div>
+
 					<div class="facet">
-						<h3 class="show_resources4">Article Date Graph</h3>
+						<h3 class="show_resources4">Less frequent Title Term Frequency Graph</h3>
 						<div id="panel4">
-							<div class="timeGraph" id="date"></div>
+							<div class="timeGraph" id="idf-rank"></div>
 						</div>
 					</div>
+					
 	        	</div>
 	        </div>
       </div>
