@@ -4,6 +4,7 @@
 		
 		beforeRequest : function() {
 			$(this.target).empty();
+			$('#'+this.target_graph).empty();
 		},
 
 		afterRequest : function() {
@@ -26,22 +27,45 @@
 	                var idf_score = Math.log((this.totalNrDocs/count)) / Math.LN10;
 					objectedItems.push({
 						text : facet,
-						idf: idf_score,
-						handlers: {click: this.clickHandler(facet)}
+						idf : idf_score,
+						handlers : {click: this.clickHandler(facet)}
 					});
 				}
 			}
+
 			//get max IDF score
-			var maxIdf = this.getMaxIdf(objectedItems,q)
+			var maxIdf = this.getMaxIdf(objectedItems,q);
+			
 			//assign weights to each word
-			for (var i = 0; i < objectedItems.length; i++) {
-				var idf = objectedItems[i].idf;
-			    objectedItems[i].weight = parseInt(idf/maxIdf * 10);
+			var len = objectedItems.length
+			for (var i=0; i<len; ++i) {
+			    var idf_score = objectedItems[i].idf;
+			    objectedItems[i].weight = parseInt(idf_score/maxIdf * 10);
 			}
 			
-			// empty the Html target element and construct the Cloud
 			$(this.target).empty();
-		    $(this.target).jQCloud(objectedItems);			
+			
+			/*
+			 * Display Word Cloud with the first N words
+			 */
+			var objectedItemsTopN = [];
+			objectedItems.sort(function (a, b) {   return b.idf < a.idf ? -1 : 1;   });
+			objectedItemsTopN = objectedItems.slice(0, this.final_nr_docs < objectedItems.length ? this.final_nr_docs : objectedItems.length);			
+		 	$(this.target).jQCloud(objectedItemsTopN);			
+
+		    /*
+		     * Display IDF graph
+		     */
+		 	morrisTemplate = {
+                    element: this.target_graph,
+                    data: objectedItems,
+                    xkey: 'text',
+                    ykeys: ['idf'],
+                    labels: ['idf'],
+                    parseTime: false 
+                  }
+            Morris.Line(morrisTemplate);
+	   
 		},
 		
 		/**
@@ -50,7 +74,7 @@
 		getMaxIdf: function (objectedItems, q) {
 			var arr = Object.keys( objectedItems ).map(
 					function ( key ) { 
-						if(key !== q) {return objectedItems[key].idf}
+						if(key !== q) {return objectedItems[key].idf;}
 						else {return false;}
 					}
 				);

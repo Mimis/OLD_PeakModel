@@ -18,6 +18,10 @@ var Manager;
 		});
  
 
+		Manager.addWidget(new AjaxSolr.ShowResultInfoWidget({
+			id: 'showResults',
+		    target: '#mini_result_message'
+		}));
 			//NOT IN USE FOR SEMANTIC VIEW
 //		/**
 //		 * Any widget inheriting from AbstractFacetWidget takes a required field property, 
@@ -45,46 +49,52 @@ var Manager;
 		
 
 		
-		Manager.addWidget(new AjaxSolr.ShowResultInfoWidget({
-			id: 'showResults',
-		    target: '#mini_result_message'
-		}));
+		
 
 		/*
-		 * Raw Term Frequency TagcloudWidget
+		 * Raw Term Most and Less Frequent TagcloudWidget
 		 */
 		Manager.addWidget(new AjaxSolr.RawTF_TagcloudWidget({
-		    id: 'article_tagcloud',
-		    target: '#raw_article_title',
-		    field: 'article_title'
+		    id: 'raw_asc_desc_article_title',
+		    target: '#raw_asc_article_title',
+		    target_desc: '#raw_desc_article_title',
+		    field: 'article_title',
+		    final_nr_docs: 35
 		}));
 		
 		/*
 		 * Inverse Document Frequency Tag Cloud
-		 */
+		 *
+
 		Manager.addWidget(new AjaxSolr.IDF_TagcloudWidget({
 		    id: 'article_idf_tagcloud',
 		    target: '#idf_article_title',
 		    field: 'article_title',
+		    final_nr_docs: 15,
+		    target_graph: 'idf-rank',
 		    totalNrDocs: 29470132 //this is the total number of dicument in our collection
 		}));
 
+		*/
+
+
 		/*
 		 * Time Series GraphWidget
-		 */	
+		*/
 		Manager.addWidget(new AjaxSolr.TimeSeriesGraphWidget({
 			id: 'graph_date',
 			target: 'date',
 			field: 'date',
-			parseTime:true
+			parseTime: true
 		}));
+		/*
 		Manager.addWidget(new AjaxSolr.TimeSeriesGraphWidget({
 			id: 'graph_title',
 			target: 'tf-rank',
 			field: 'article_title',
 			parseTime:false
 		}));
-		
+		*/
 		
 		
 		/*
@@ -135,7 +145,7 @@ var Manager;
 		Manager.init();
 		
 		//use the ParameterStore addByValue API method right now to build a basic query
-		Manager.store.addByValue('q', 'democratie');
+		Manager.store.addByValue('q', '*:*');
 //		sort by extraction date:
 //		Manager.store.addByValue('sort', 'extraction_date desc');
 		//sort by score...example
@@ -152,7 +162,8 @@ var Manager;
 		var params = {
 			facet : true,
 			'facet.field' : ['article_title', 'date'], //These fields are out facet fields
-			'facet.limit' : 100, //display only 10 facet values
+			'facet.limit' : 1000, 
+			'f.date.facet.limit': 150,
 			'facet.offset' : 0,
 			'facet.mincount' : 1,
 			'json.nl' : 'map',
