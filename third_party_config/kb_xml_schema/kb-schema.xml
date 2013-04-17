@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+default namespace = ""
+namespace dc = "http://purl.org/dc/elements/1.1/"
+namespace pm = "http://www.politicalmashup.nl"
+
+
+# Our newspaper xml-files are always contained within a pm:KBroot element.
+start = KBRoot | PmRoot
+
+
+# <pm:KBroot> is the container (xml-file-root) for a set of articles.
+KBRoot = element pm:KBroot {
+  RecordFile, 
+  PmRoot*     # '*' for files created with criteria that did not match any article.
+  }
+
+
+# @recordfile contains the absolute path of the file with article meta-data during processing.
+# It is present in aggregate xml documents that are the direct result of initial processing.
+# For derived xml's, it can/should be used as file identifier (e.g. "1990" for an xml with all articles from 1990).
+RecordFile = attribute recordfile { text }
+
+
+# <pm:root> contains all information of exactly one article.
+# For many retrieval purposes, one such pm:root counts as "one document".
+PmRoot = element pm:root {
+  PmDocinfo,
+  PmMeta,
+  PmContent
+  }
+
+
+# <pm:docinfo> is used in other PoliticalMashup data, but is empty for the newspapers.
+PmDocinfo = element pm:docinfo { empty }
+
+
+# <pm:meta> contains meta-data on about the article, namely publication date, type of article, unique identifier and source information.
+PmMeta = element pm:meta {
+  DcDate,
+  DcSubject,
+  DcIdentifier,
+  DcSource
+  }
+
+
+# <dc:date> contains the original date of publication of the article, i.e. the publication date of the specific paper it appeared in.
+DcDate = element dc:date { xsd:date }
+
+
+# <dc:subject> contains the type of the article; currently known options:
+# advertentie, artikel, familiebericht, illustratie met onderschrift
+DcSubject = element dc:subject { "advertentie" | "artikel" | "familiebericht" | "illustratie met onderschrift" }
+
+
+# <dc:identifier> unique identifier for this article,
+DcIdentifier = element dc:identifier { IdentifierToken }
+
+
+# String that represents a unique identifier for a newspaper article, and is resolvable at the KB.
+# e.g. ddd:010567623:mpeg21:p001:a0001 @ http://kranten.kb.nl/view/article/id/ddd:010567623:mpeg21:p001:a0001
+# The structure of the identifiers is probably: ddd:<unique-id-for-single-newspaper>:mpeg21:p<unique-page-id-in-paper>:a<unique-article-id-in-paper>
+IdentifierToken = xsd:token { pattern = "ddd:[0-9]+:mpeg21:p[0-9]+:a[0-9]+" }
+
+
+# <dc:source> is a one-time-recursive element, that contains the newspaper source in which the article appeared.
+DcSource = element dc:source { ( DcSource | PmLink ) }
+
+
+# <pm:link> contains the textual name and integer id of the newspaper in which the article appeared.
+# @pm:description contains the textual name of the newspaper (e.g. "Leeuwarder courant : hoofdblad van Friesland")
+# @pm:source contains the unique integer id for the newspaper in the KB catalogue (e.g. "865061483").
+# According to the documentation, the @pm:source is:
+#   "PPN: dit is het identificatienummer van de krant in de algemene catalogus (Gemeenschappelijk Geautomatiseerd Catalogussysteem, GGC)"
+PmLink = element pm:link {
+  attribute pm:description { text },
+#  attribute pm:source { xsd:integer }
+# Sometimes the pm:source ends with an X (and maybe other reasons why xsd:integer is invalid).
+  attribute pm:source { xsd:token { pattern = "[0-9]+X?" } }  
+  }
+
+
+# <pm:content> contains the actual content of the article (title, text and some attributes).
+PmContent = element pm:content {
+  ContentPmId,
+  PmSource,
+  Title,
+  Text
+  }
+
+
+# @pm:id of the PmContent element is the main identifier of the content, and equal to the DcIdentifier in the PmMeta of the PmRoot of the same article.
+ContentPmId = attribute pm:id { IdentifierToken }
+
+
+# @pm:source contains the actual url of the article data (image + meta-data) at the source.
+PmSource = attribute pm:source { xsd:anyURI }
+
+
+# <title> contains the title of the article (either text, or also often empty).
+Title = element title { TextualContent }
+
+
+# Actual extual content, that can be searched or indexed, and uniquely identified by an id.
+TextualContent = ( SubContentPmId, text )
+
+
+# @pm:id of Title and Paragraph elements are always the IdentifierToken plus some suffix.
+# TODO: merge, at least conceptually, IdentifierToken, ContentPmId and SubContentPmId.
+SubContentPmId = attribute pm:id { xsd:token { pattern = "ddd:[0-9]+:mpeg21:p[0-9]+:a[0-9]+.[t0-9.]+" } }
+
+
+# <text> contains all (zero or more) paragraphs of actual textual content for the article.
+# The only time the text contains no paragraphs, is if there was some problem (either not available or broken source data).
+Text = element text { Paragraph* }
+
+
+# <p> contains one line/paragraph of actual textual content of an article.
+Paragraph = element p { TextualContent }
+
+	
