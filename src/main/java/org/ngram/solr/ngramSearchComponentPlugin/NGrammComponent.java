@@ -3,6 +3,7 @@ package org.ngram.solr.searchComponent;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -13,7 +14,6 @@ import java.util.Set;
 import java.util.logging.Logger;
 
 import org.apache.lucene.index.FieldInfo;
-import org.apache.lucene.index.Fields;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.StoredFieldVisitor;
 import org.apache.lucene.index.Term;
@@ -130,7 +130,7 @@ public class NGrammComponent extends SearchComponent implements SolrCoreAware {
 		String uniqFieldName = null;
 		if (keyField != null) {
 			uniqFieldName = keyField.getName();
-			termVectors.add("uniqueKeyFieldName", uniqFieldName);
+//			termVectors.add("uniqueKeyFieldName", uniqFieldName);
 		}
 
 		FieldOptions allFields = new FieldOptions();
@@ -230,8 +230,9 @@ public class NGrammComponent extends SearchComponent implements SolrCoreAware {
 			iter = list.iterator();
 		}
 		SolrIndexSearcher searcher = rb.req.getSearcher();
-
 		IndexReader reader = searcher.getIndexReader();
+
+
 		// the TVMapper is a TermVectorMapper which can be used to optimize
 		// loading of Term Vectors
 
@@ -278,6 +279,7 @@ public class NGrammComponent extends SearchComponent implements SolrCoreAware {
 		int c=0;
 		while (iter.hasNext()) {
 			Integer docId = iter.next();
+//			LOGGER.info("docId:" + docId);
 
 			// get unique key of current doc
 			if (keyField != null && c==0) {
@@ -309,10 +311,12 @@ public class NGrammComponent extends SearchComponent implements SolrCoreAware {
 					}
 				}
 			}
+			if(c!=0)
+				c++;
 		}
 		//displayTotalTermStats(fieldToTermStatsMap);
 		mapToNameList(docNL, fieldToTermStatsMap);
-		LOGGER.info("Process Time:" + getTimeMS(startTime));
+		LOGGER.info("Process DocsIteratorSize:" + c +"\tProcess Time:" + getTimeMS(startTime)+"\t"+rb.getDebugInfo());
 	}
 
 	/**
@@ -320,16 +324,15 @@ public class NGrammComponent extends SearchComponent implements SolrCoreAware {
 	 * @param docNL
 	 * @param fieldToTermStatsMap
 	 */
-	private void mapToNameList(NamedList<Object> docNL,Map<String, Map<String, NGrammStats>> fieldToTermStatsMap){
-		NamedList<Object> fieldNL = new NamedList<Object>();
+	private void mapToNameList(NamedList<Object> docNL, Map<String, Map<String, NGrammStats>> fieldToTermStatsMap){
 		
 		for(Map.Entry<String, Map<String, NGrammStats>> entry :fieldToTermStatsMap.entrySet()){
-			LOGGER.info("Field:"+entry.getKey());
+			NamedList<Object> fieldNL = new NamedList<Object>();
 			docNL.add(entry.getKey(), fieldNL);
 
 			Map<String, NGrammStats> terms  = entry.getValue();
+			LOGGER.info("Field:"+entry.getKey()+"\tNrOfTerms:"+terms.size());
 			for(Map.Entry<String, NGrammStats> termStas :terms.entrySet()){
-				LOGGER.info("\tTerm:"+termStas.getKey()+"\t"+termStas.getValue().toString());
 				NamedList<Object> termInfo = new NamedList<Object>();
 				fieldNL.add(termStas.getKey(), termInfo);
 				termInfo.add("tf", termStas.getValue().getTf());
@@ -408,6 +411,8 @@ public class NGrammComponent extends SearchComponent implements SolrCoreAware {
 		if (rb.stage == ResponseBuilder.STAGE_GET_FIELDS) {
 			long startTime = System.currentTimeMillis();
 
+			String key = null;
+			Map<String, Map<String, NGrammStats>> fieldToTermStatsMap = new HashMap<String, Map<String, NGrammStats>>();
 			NamedList termVectors = new NamedList<Object>();
 			Map.Entry<String, Object>[] arr = new NamedList.NamedListEntry[rb.resultIds.size()];
 
@@ -421,16 +426,67 @@ public class NGrammComponent extends SearchComponent implements SolrCoreAware {
 					LOGGER.info("\tsrsp.getNodeName()" + srsp.getShard() + "\tfinishStage Docs Size:" + nl.size());
 
 					for (int i = 0; i < nl.size(); i++) {
-						String key = nl.getName(i);
-						ShardDoc sdoc = rb.resultIds.get(key);
-						termVectors.add(key, nl.getVal(i));
+						key = nl.getName(i);//THIS THE UNIQUE ID VALUE
+						NamedList<Object> nl2 = (NamedList<Object>) nl.getVal(i);
+//						termVectors.add(key, nl.getVal(i));
+						/*
+						 * iterate all over the fields terms and save them in a temp Map
+						 */
+						sumUpTermFreqStatsPerField(nl2, fieldToTermStatsMap);
+
 					}
 				}
+				
+				
 			}
+			//map to termVector and save it/ TODO here we need to procees the final result set.i.e. top N most frequent terms
+			NamedList<Object> docNL = new NamedList<Object> ();
+			termVectors.add(key, docNL);
+			mapToNameList(docNL, fieldToTermStatsMap);
 			rb.rsp.add(TERM_VECTORS, termVectors);
 			// timer
 			LOGGER.info("finishStage Time:" + getTimeMS(startTime));
 		}
+	}
+
+	/**
+	 * Save/Appenf Term frequencies to the given fieldToTermStatsMap
+	 * @param nl2
+	 * @param fieldToTermStatsMap
+	 */
+	private void sumUpTermFreqStatsPerField(NamedList<Object> nl2,Map<String, Map<String, NGrammStats>> fieldToTermStatsMap){
+		for (int y = 0; y < nl2.size(); y++) {
+			String field = nl2.getName(y);
+			if(!field.equals("uniqueKey")){
+				NamedList<Object> nl3 = (NamedList<Object>) nl2.getVal(y);
+				
+				if (!fieldToTermStatsMap.containsKey(field)) 
+					fieldToTermStatsMap.put(field,new HashMap<String, NGrammStats>());
+				Map<String, NGrammStats> fieldTotalTermStats = fieldToTermStatsMap.get(field);
+
+				
+				for (int z = 0; z< nl3.size(); z++) {
+					String term = nl3.getName(z);
+					NGrammStats termStats = fieldTotalTermStats.get(term);
+					NamedList<Object> nl4 = (NamedList<Object>) nl3.getVal(z);
+					
+					NGrammStats ngrammStats = new NGrammStats();
+					for (int c = 0; c< nl4.size(); c++) {
+						String TermStatName = nl4.getName(c);
+						ngrammStats.add(TermStatName, (Integer)nl4.getVal(c));
+					}
+					
+					if(termStats != null){
+						termStats.appendStats(ngrammStats);
+					}
+					else{
+						fieldTotalTermStats.put(term, ngrammStats);
+					}					
+				}
+				
+			}
+		}
+
 	}
 
 	private List<Integer> getInts(String[] vals) {
@@ -558,6 +614,12 @@ class NGrammStats {
 		this.df = df;
 	}
 
+	
+	public NGrammStats() {
+		super();
+	}
+
+
 	public int getTf() {
 		return tf;
 	}
@@ -578,6 +640,18 @@ class NGrammStats {
 		this.tf += value;
 	}
 
+	public void add(String key,int value){
+		if(key.equals("tf"))
+			this.tf = value;
+		else if(key.equals("df"))
+			this.df = value;
+	}
+	
+	public void appendStats(NGrammStats nGrammStats){
+		this.tf += nGrammStats.getTf();
+		this.df += nGrammStats.getDf();
+	}
+	
 	@Override
 	public String toString() {
 		return "NGrammStats [df=" + df + ", tf=" + tf + "]";
