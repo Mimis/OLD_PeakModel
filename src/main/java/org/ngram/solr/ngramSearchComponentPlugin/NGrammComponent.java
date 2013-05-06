@@ -3,11 +3,13 @@ package org.ngram.solr.searchComponent;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -28,7 +30,6 @@ import org.apache.solr.common.util.NamedList;
 import org.apache.solr.core.SolrCore;
 import org.apache.solr.handler.component.ResponseBuilder;
 import org.apache.solr.handler.component.SearchComponent;
-import org.apache.solr.handler.component.ShardDoc;
 import org.apache.solr.handler.component.ShardRequest;
 import org.apache.solr.handler.component.ShardResponse;
 import org.apache.solr.schema.IndexSchema;
@@ -59,21 +60,13 @@ import org.apache.solr.util.plugin.SolrCoreAware;
  */
 
 /**
- * PERFORMANCE: the main delay function is the process(rb) and mapOneVector()
  * 
- * 
- * TEST QUERIES: one core:
- * http://localhost:8080/solr/core1950/select?q=nederland
- * &wt=xml&indent=true&fl=id
- * &ng=true&tv.fl=article_title,paragraph&tv.tf=true&tv.df=true multi-core:
- * http:
- * //localhost:8080/solr/core1950/select?shards=localhost:8080/solr/core1950
- * ,localhost
- * :8080/solr/core1960,localhost:8080/solr/core1970,localhost:8080/solr
- * /core1980,
- * localhost:8080/solr/core1990&q=paok&fl=id&tv.fl=article_title&tv.tf=
- * true&tv.df=true
- * 
+ * TEST QUERIES: 
+ *  one core:
+ * http://localhost:8080/solr/core1950/select?q=nederland&wt=xml&indent=true&fl=id,article_title&ng=true&tv.fl=article_title,paragraph&tv.tf=true&tv.df=true 
+	multi-core:
+ * FACET:http://localhost:8080/solr/core1950/select?shards=localhost:8080/solr/core1950,localhost:8080/solr/core1960,localhost:8080/solr/core1970,localhost:8080/solr/core1980,localhost:8080/solr/core1990&shards.info=true&fl=id,article_title&tv.fl=paragraph&tv.tf=true&tv.df=true&rows=20&facet=true&facet.field=article_title&facet.limit=10&facet.mincount=1&facet.offset=0&q=nederland
+ * http://localhost:8080/solr/core1950/select?shards=localhost:8080/solr/core1950,localhost:8080/solr/core1960,localhost:8080/solr/core1970,localhost:8080/solr/core1980,localhost:8080/solr/core1990&shards.info=true&fl=id,article_title&tv.fl=article_title,paragraph&tv.tf=true&tv.df=true&q=nederland
  * 
  * Return term vectors for the documents in a query result set.
  * <p/>
@@ -102,9 +95,9 @@ public class NGrammComponent extends SearchComponent implements SolrCoreAware {
 			.getName());
 	static final String LOG_PROPERTIES_FILE = "./logs/log4j_NGrammComponent.properties";
 
-	// TOPO remove that in our component..keep things simple
 	public static final String COMPONENT_NAME = "ng";
-
+	public static final String RETURN_TOP_N = "ng.topN";
+	public static final String SORT_NGRAMM = "ng.sort";
 	protected NamedList initParams;
 	// THIS THE NAME OF THE SOLR RESPONCE XML ELEMENT THAT CONTAINS OUR
 	// COMPONENTS OUTPUT
@@ -412,10 +405,14 @@ public class NGrammComponent extends SearchComponent implements SolrCoreAware {
 			long startTime = System.currentTimeMillis();
 
 			String key = null;
+			int topN = 10; //default
+			String sortMethod = "tf";
 			Map<String, Map<String, NGrammStats>> fieldToTermStatsMap = new HashMap<String, Map<String, NGrammStats>>();
 			NamedList termVectors = new NamedList<Object>();
-			Map.Entry<String, Object>[] arr = new NamedList.NamedListEntry[rb.resultIds.size()];
-
+			
+			topN = rb.req.getParams().getInt(RETURN_TOP_N);
+			sortMethod = rb.req.getParams().get(SORT_NGRAMM);
+			
 			for (ShardRequest sreq : rb.finished) {
 				if ((sreq.purpose & ShardRequest.PURPOSE_GET_FIELDS) == 0 || !sreq.params.getBool(COMPONENT_NAME, false)) {
 					continue;
@@ -433,22 +430,50 @@ public class NGrammComponent extends SearchComponent implements SolrCoreAware {
 						 * iterate all over the fields terms and save them in a temp Map
 						 */
 						sumUpTermFreqStatsPerField(nl2, fieldToTermStatsMap);
-
 					}
-				}
-				
-				
+				}				
 			}
 			//map to termVector and save it/ TODO here we need to procees the final result set.i.e. top N most frequent terms
 			NamedList<Object> docNL = new NamedList<Object> ();
 			termVectors.add(key, docNL);
-			mapToNameList(docNL, fieldToTermStatsMap);
+			
+			//Sort by..
+			Map<String,Map<String, NGrammStats>> fieldToTermStatsMapSorted = null;
+			if(sortMethod.equals("df"))
+				fieldToTermStatsMapSorted = sortFieldToTermStatsMapByGetTopN(fieldToTermStatsMap,"df",topN);
+			else
+				fieldToTermStatsMapSorted = sortFieldToTermStatsMapByGetTopN(fieldToTermStatsMap,"tf",topN);
+			
+			mapToNameList(docNL, fieldToTermStatsMapSorted);
 			rb.rsp.add(TERM_VECTORS, termVectors);
 			// timer
 			LOGGER.info("finishStage Time:" + getTimeMS(startTime));
 		}
 	}
+	
+	/**
+	 * 
+	 * @param fieldToTermStatsMap
+	 * @param sortField
+	 * @return the given map sorted by the given field 
+	 */
+	private Map<String,Map<String, NGrammStats>> sortFieldToTermStatsMapByGetTopN(Map<String,Map<String, NGrammStats>> fieldToTermStatsMap,String sortField,int topN){
+		Map<String,Map<String, NGrammStats>> fieldToTermStatsMapSorted = new HashMap<String,Map<String, NGrammStats>> ();
+		for(Map.Entry<String,Map<String, NGrammStats>> entry : fieldToTermStatsMap.entrySet()){
+			String field = entry.getKey();
+			Map<String, NGrammStats> termStatsMap = entry.getValue();
+			if(sortField.equals("tf"))
+				termStatsMap = sortMapByTFValue(termStatsMap,topN);
+			else if(sortField.equals("df"))
+				termStatsMap = sortMapByDFValue(termStatsMap,topN);
+			fieldToTermStatsMapSorted.put(field, termStatsMap);
+		}
+		return fieldToTermStatsMapSorted;
+	}
+	
+	
 
+	
 	/**
 	 * Save/Appenf Term frequencies to the given fieldToTermStatsMap
 	 * @param nl2
@@ -600,6 +625,50 @@ public class NGrammComponent extends SearchComponent implements SolrCoreAware {
 			}
 		}
 	}
+	
+	
+	/**
+	 * BADD duplication here
+	 * @param <K>
+	 * @param <V>
+	 * @param map
+	 * @param topN
+	 * @return
+	 */
+	public static <K, V extends Comparable<? super V>> Map<String, NGrammStats> sortMapByTFValue( Map<String, NGrammStats> map,int topN) {
+        List<Map.Entry<String, NGrammStats>> list = new LinkedList<Map.Entry<String, NGrammStats>>( map.entrySet());
+        Collections.sort(list, new Comparator<Map.Entry<String, NGrammStats>>() {
+            public int compare(Map.Entry<String, NGrammStats> o1, Map.Entry<String, NGrammStats> o2) {
+                return (new Integer(o2.getValue().getTf())).compareTo(new Integer(o1.getValue().getTf()));
+            }
+        });
+
+        int c=1;
+        Map<String, NGrammStats> result = new LinkedHashMap<String, NGrammStats>();
+        for (Map.Entry<String, NGrammStats> entry : list) {
+            result.put(entry.getKey(), entry.getValue());
+            if(c++ >= topN)
+            	break;
+        }
+        return result;
+    }
+	public static <K, V extends Comparable<? super V>> Map<String, NGrammStats> sortMapByDFValue( Map<String, NGrammStats> map,int topN) {
+        List<Map.Entry<String, NGrammStats>> list = new LinkedList<Map.Entry<String, NGrammStats>>( map.entrySet());
+        Collections.sort(list, new Comparator<Map.Entry<String, NGrammStats>>() {
+            public int compare(Map.Entry<String, NGrammStats> o1, Map.Entry<String, NGrammStats> o2) {
+                return (new Integer(o2.getValue().getDf())).compareTo(new Integer(o1.getValue().getDf()));
+            }
+        });
+        int c=1;
+        Map<String, NGrammStats> result = new LinkedHashMap<String, NGrammStats>();
+        for (Map.Entry<String, NGrammStats> entry : list) {
+            result.put(entry.getKey(), entry.getValue());
+            if(c++ >= topN)
+            	break;
+        }
+        return result;
+    }
+
 
 }
 
@@ -657,10 +726,14 @@ class NGrammStats {
 		return "NGrammStats [df=" + df + ", tf=" + tf + "]";
 	}
 	
-
 }
 
 class FieldOptions {
 	String fieldName;
 	boolean termFreq, docFreq, tfIdf;
+}
+
+class By {
+	public String tf = "tf";
+	public String df = "df";
 }
