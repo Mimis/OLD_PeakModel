@@ -98,6 +98,8 @@ public class NGrammComponent extends SearchComponent implements SolrCoreAware {
 	public static final String COMPONENT_NAME = "ng";
 	public static final String RETURN_TOP_N = "ng.topN";
 	public static final String SORT_NGRAMM = "ng.sort";
+	public static final String TOTAL_DOCS = "totalDocs";
+	
 	protected NamedList initParams;
 	// THIS THE NAME OF THE SOLR RESPONCE XML ELEMENT THAT CONTAINS OUR
 	// COMPONENTS OUTPUT
@@ -308,7 +310,7 @@ public class NGrammComponent extends SearchComponent implements SolrCoreAware {
 				c++;
 		}
 		//displayTotalTermStats(fieldToTermStatsMap);
-		mapToNameList(docNL, fieldToTermStatsMap);
+		mapToNameList(docNL, fieldToTermStatsMap,false);
 		LOGGER.info("Process DocsIteratorSize:" + c +"\tProcess Time:" + getTimeMS(startTime)+"\t"+rb.getDebugInfo());
 	}
 
@@ -317,7 +319,7 @@ public class NGrammComponent extends SearchComponent implements SolrCoreAware {
 	 * @param docNL
 	 * @param fieldToTermStatsMap
 	 */
-	private void mapToNameList(NamedList<Object> docNL, Map<String, Map<String, NGrammStats>> fieldToTermStatsMap){
+	private void mapToNameList(NamedList<Object> docNL, Map<String, Map<String, NGrammStats>> fieldToTermStatsMap,boolean idf){
 		
 		for(Map.Entry<String, Map<String, NGrammStats>> entry :fieldToTermStatsMap.entrySet()){
 			NamedList<Object> fieldNL = new NamedList<Object>();
@@ -330,6 +332,8 @@ public class NGrammComponent extends SearchComponent implements SolrCoreAware {
 				fieldNL.add(termStas.getKey(), termInfo);
 				termInfo.add("tf", termStas.getValue().getTf());
 				termInfo.add("df", termStas.getValue().getDf());
+				if(idf)
+					termInfo.add("idf", termStas.getValue().getIdf());
 			}
 		}
 		
@@ -412,7 +416,8 @@ public class NGrammComponent extends SearchComponent implements SolrCoreAware {
 			
 			topN = rb.req.getParams().getInt(RETURN_TOP_N);
 			sortMethod = rb.req.getParams().get(SORT_NGRAMM);
-			
+		    int totalDocs = rb.req.getParams().getInt(TOTAL_DOCS);
+		    
 			for (ShardRequest sreq : rb.finished) {
 				if ((sreq.purpose & ShardRequest.PURPOSE_GET_FIELDS) == 0 || !sreq.params.getBool(COMPONENT_NAME, false)) {
 					continue;
@@ -441,15 +446,31 @@ public class NGrammComponent extends SearchComponent implements SolrCoreAware {
 			Map<String,Map<String, NGrammStats>> fieldToTermStatsMapSorted = null;
 			if(sortMethod.equals("df"))
 				fieldToTermStatsMapSorted = sortFieldToTermStatsMapByGetTopN(fieldToTermStatsMap,"df",topN);
-			else
+			else if(sortMethod.equals("tf"))
 				fieldToTermStatsMapSorted = sortFieldToTermStatsMapByGetTopN(fieldToTermStatsMap,"tf",topN);
+			else if(sortMethod.equals("idf")){
+				calculateIdfScores(fieldToTermStatsMap,totalDocs);
+				fieldToTermStatsMapSorted = sortFieldToTermStatsMapByGetTopN(fieldToTermStatsMap,"idf",topN);
+			}
 			
-			mapToNameList(docNL, fieldToTermStatsMapSorted);
+			mapToNameList(docNL, fieldToTermStatsMapSorted,true);
 			rb.rsp.add(TERM_VECTORS, termVectors);
 			// timer
 			LOGGER.info("finishStage Time:" + getTimeMS(startTime));
 		}
 	}
+	
+	private void calculateIdfScores(Map<String, Map<String, NGrammStats>> fieldToTermStatsMap,int totalDocs){
+		for(Map.Entry<String,Map<String, NGrammStats>> entry : fieldToTermStatsMap.entrySet()){
+			Map<String, NGrammStats> termStatsMap = entry.getValue();
+			for(Map.Entry<String, NGrammStats> entryTerms : termStatsMap.entrySet()){
+				NGrammStats termStats = entryTerms.getValue();
+				double idf = Math.log10((double) totalDocs / termStats.getDf());
+				termStats.setIdf(idf);
+			}
+		}
+	}
+	
 	
 	/**
 	 * 
@@ -466,6 +487,8 @@ public class NGrammComponent extends SearchComponent implements SolrCoreAware {
 				termStatsMap = sortMapByTFValue(termStatsMap,topN);
 			else if(sortField.equals("df"))
 				termStatsMap = sortMapByDFValue(termStatsMap,topN);
+			else if(sortField.equals("idf"))
+				termStatsMap = sortMapByIDFValue(termStatsMap,topN);
 			fieldToTermStatsMapSorted.put(field, termStatsMap);
 		}
 		return fieldToTermStatsMapSorted;
@@ -575,7 +598,8 @@ public class NGrammComponent extends SearchComponent implements SolrCoreAware {
 	 * {@link TermVectorParams#FIELDS} param if specified, otherwise it returns
 	 * the concrete field values specified in {@link CommonParams#FL} --
 	 * ignoring functions, transformers, or literals.
-	 * </p>
+	 * </p>java.lang.ClassCastException: java.lang.Double cannot be cast to java.lang.Integer at org.ngram.solr.searchComponent.NGrammComponent.sumUpTermFreqStatsPerField(NGrammComponent.java:523) at org.ngram.solr.searchComponent.NGrammComponent.finishStage(NGrammComponent.java:436) at org.apache.solr.handler.component.SearchHandler.handleRequestBody(SearchHandler.java:317) at org.apache.solr.handler.RequestHandlerBase.handleRequest(RequestHandlerBase.java:135) at org.apache.solr.core.SolrCore.execute(SolrCore.java:1817) at org.apache.solr.servlet.SolrDispatchFilter.execute(SolrDispatchFilter.java:639) at org.apache.solr.servlet.SolrDispatchFilter.doFilter(SolrDispatchFilter.java:345) at org.apache.solr.servlet.SolrDispatchFilter.doFilter(SolrDispatchFilter.java:141) at org.eclipse.jetty.servlet.ServletHandler$CachedChain.doFilter(ServletHandler.java:1291) at org.eclipse.jetty.servlet.ServletHandler.doHandle(ServletHandler.java:443) at org.eclipse.jetty.server.handler.ScopedHandler.handle(ScopedHandler.java:137) at org.eclipse.jetty.security.SecurityHandler.handle(SecurityHandler.java:556) at org.eclipse.jetty.server.session.SessionHandler.doHandle(SessionHandler.java:227) at org.eclipse.jetty.server.handler.ContextHandler.doHandle(ContextHandler.java:1044) at org.eclipse.jetty.servlet.ServletHandler.doScope(ServletHandler.java:372) at org.eclipse.jetty.server.session.SessionHandler.doScope(SessionHandler.java:189) at org.eclipse.jetty.server.handler.ContextHandler.doScope(ContextHandler.java:978) at org.eclipse.jetty.server.handler.ScopedHandler.handle(ScopedHandler.java:135) at org.eclipse.jetty.server.handler.ContextHandlerCollection.handle(ContextHandlerCollection.java:255) at org.eclipse.jetty.server.handler.HandlerCollection.handle(HandlerCollection.java:154) at org.eclipse.jetty.server.handler.HandlerWrapper.handle(HandlerWrapper.java:116) at org.eclipse.jetty.server.Server.handle(Server.java:367) at org.eclipse.jetty.server.AbstractHttpConnection.handleRequest(AbstractHttpConnection.java:486) at org.eclipse.jetty.server.AbstractHttpConnection.headerComplete(AbstractHttpConnection.java:926) at org.eclipse.jetty.server.AbstractHttpConnection$RequestHandler.headerComplete(AbstractHttpConnection.java:988) at org.eclipse.jetty.http.HttpParser.parseNext(HttpParser.java:640) at org.eclipse.jetty.http.HttpParser.parseAvailable(HttpParser.java:235) at org.eclipse.jetty.server.AsyncHttpConnection.handle(AsyncHttpConnection.java:82) at org.eclipse.jetty.io.nio.SelectChannelEndPoint.handle(SelectChannelEndPoint.java:628) at org.eclipse.jetty.io.nio.SelectChannelEndPoint$1.run(SelectChannelEndPoint.java:52) at org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:608) at org.eclipse.jetty.util.thread.QueuedThreadPool$3.run(QueuedThreadPool.java:543) at java.lang.Thread.run(Thread.java:662)
+
 	 * <p>
 	 * If "fl=*" is used, or neither param is specified, then <code>null</code>
 	 * will be returned. If the empty set is returned, it means the "fl"
@@ -668,7 +692,23 @@ public class NGrammComponent extends SearchComponent implements SolrCoreAware {
         }
         return result;
     }
-
+	
+	public static <K, V extends Comparable<? super V>> Map<String, NGrammStats> sortMapByIDFValue( Map<String, NGrammStats> map,int topN) {
+        List<Map.Entry<String, NGrammStats>> list = new LinkedList<Map.Entry<String, NGrammStats>>( map.entrySet());
+        Collections.sort(list, new Comparator<Map.Entry<String, NGrammStats>>() {
+            public int compare(Map.Entry<String, NGrammStats> o1, Map.Entry<String, NGrammStats> o2) {
+                return (o2.getValue().getIdf()).compareTo(o1.getValue().getIdf());
+            }
+        });
+        int c=1;
+        Map<String, NGrammStats> result = new LinkedHashMap<String, NGrammStats>();
+        for (Map.Entry<String, NGrammStats> entry : list) {
+            result.put(entry.getKey(), entry.getValue());
+            if(c++ >= topN)
+            	break;
+        }
+        return result;
+    }
 
 }
 
@@ -676,11 +716,12 @@ class NGrammStats {
 	private int tf;// we count an single term occurence for each doc no matter
 					// how many times occur in
 	private int df;
-
+	private double idf;
 	public NGrammStats(int tf, int df) {
 		super();
 		this.tf = tf;
 		this.df = df;
+		this.idf = 0.0;
 	}
 
 	
@@ -696,7 +737,14 @@ class NGrammStats {
 	public void setTf(int tf) {
 		this.tf = tf;
 	}
+	
+	public void setIdf(double idf) {
+		this.idf = idf;
+	}
 
+	public Double getIdf(){
+		return this.idf;
+	}
 	public int getDf() {
 		return df;
 	}
