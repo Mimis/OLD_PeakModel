@@ -284,7 +284,7 @@ public class NGrammComponent extends SearchComponent implements SolrCoreAware {
 					uniqVal = uniqValues.get(0);
 					uniqValues.clear();
 					docNL.add("uniqueKey", uniqVal);
-					termVectors.add(uniqVal, docNL);
+//					termVectors.add(uniqVal, docNL);
 					c++;
 				}
 			}
@@ -310,7 +310,18 @@ public class NGrammComponent extends SearchComponent implements SolrCoreAware {
 				c++;
 		}
 		//displayTotalTermStats(fieldToTermStatsMap);
-		mapToNameList(docNL, fieldToTermStatsMap,false);
+		String shards_parameter = rb.req.getParams().get("shards");
+		//if its a not distributed query then sort TV by given method and return top N
+		if(shards_parameter == null){
+			int topN = rb.req.getParams().getInt(RETURN_TOP_N);
+			String sortMethod = rb.req.getParams().get(SORT_NGRAMM);
+		    int totalDocs = rb.req.getParams().getInt(TOTAL_DOCS);
+			Map<String,Map<String, NGrammStats>> fieldToTermStatsMapSorted = sortByAndGetTopN(sortMethod, fieldToTermStatsMap, topN, totalDocs);
+			mapToNameList(termVectors, fieldToTermStatsMapSorted, true);
+		}
+		else{
+			mapToNameList(termVectors, fieldToTermStatsMap, true);
+		}
 		LOGGER.info("Process DocsIteratorSize:" + c +"\tProcess Time:" + getTimeMS(startTime)+"\t"+rb.getDebugInfo());
 	}
 
@@ -319,11 +330,11 @@ public class NGrammComponent extends SearchComponent implements SolrCoreAware {
 	 * @param docNL
 	 * @param fieldToTermStatsMap
 	 */
-	private void mapToNameList(NamedList<Object> docNL, Map<String, Map<String, NGrammStats>> fieldToTermStatsMap,boolean idf){
+	private void mapToNameList(NamedList<Object> termVectors, Map<String, Map<String, NGrammStats>> fieldToTermStatsMap,boolean idf){
 		
 		for(Map.Entry<String, Map<String, NGrammStats>> entry :fieldToTermStatsMap.entrySet()){
 			NamedList<Object> fieldNL = new NamedList<Object>();
-			docNL.add(entry.getKey(), fieldNL);
+			termVectors.add(entry.getKey(), fieldNL);
 
 			Map<String, NGrammStats> terms  = entry.getValue();
 			LOGGER.info("Field:"+entry.getKey()+"\tNrOfTerms:"+terms.size());
@@ -408,11 +419,10 @@ public class NGrammComponent extends SearchComponent implements SolrCoreAware {
 		if (rb.stage == ResponseBuilder.STAGE_GET_FIELDS) {
 			long startTime = System.currentTimeMillis();
 
-			String key = null;
 			int topN = 10; //default
 			String sortMethod = "tf";
 			Map<String, Map<String, NGrammStats>> fieldToTermStatsMap = new HashMap<String, Map<String, NGrammStats>>();
-			NamedList termVectors = new NamedList<Object>();
+			NamedList<Object> termVectors = new NamedList<Object>();
 			
 			topN = rb.req.getParams().getInt(RETURN_TOP_N);
 			sortMethod = rb.req.getParams().get(SORT_NGRAMM);
@@ -423,41 +433,40 @@ public class NGrammComponent extends SearchComponent implements SolrCoreAware {
 					continue;
 				}
 				for (ShardResponse srsp : sreq.responses) {
-					// map<docId,tv>
+					// map<field,termVector>
 					NamedList<Object> nl = (NamedList<Object>) srsp.getSolrResponse().getResponse().get(TERM_VECTORS);
 					LOGGER.info("\tsrsp.getNodeName()" + srsp.getShard() + "\tfinishStage Docs Size:" + nl.size());
 
-					for (int i = 0; i < nl.size(); i++) {
-						key = nl.getName(i);//THIS THE UNIQUE ID VALUE
-						NamedList<Object> nl2 = (NamedList<Object>) nl.getVal(i);
-//						termVectors.add(key, nl.getVal(i));
-						/*
-						 * iterate all over the fields terms and save them in a temp Map
-						 */
-						sumUpTermFreqStatsPerField(nl2, fieldToTermStatsMap);
-					}
+					/*
+					 * iterate all over the fields terms and save them in a temp Map
+					 */
+					sumUpTermFreqStatsPerField(nl, fieldToTermStatsMap);
 				}				
 			}
 			//map to termVector and save it/ TODO here we need to procees the final result set.i.e. top N most frequent terms
 			NamedList<Object> docNL = new NamedList<Object> ();
-			termVectors.add(key, docNL);
 			
-			//Sort by..
-			Map<String,Map<String, NGrammStats>> fieldToTermStatsMapSorted = null;
-			if(sortMethod.equals("df"))
-				fieldToTermStatsMapSorted = sortFieldToTermStatsMapByGetTopN(fieldToTermStatsMap,"df",topN);
-			else if(sortMethod.equals("tf"))
-				fieldToTermStatsMapSorted = sortFieldToTermStatsMapByGetTopN(fieldToTermStatsMap,"tf",topN);
-			else if(sortMethod.equals("idf")){
-				calculateIdfScores(fieldToTermStatsMap,totalDocs);
-				fieldToTermStatsMapSorted = sortFieldToTermStatsMapByGetTopN(fieldToTermStatsMap,"idf",topN);
-			}
+			//Sort by..and get the top N
+			Map<String,Map<String, NGrammStats>> fieldToTermStatsMapSorted = sortByAndGetTopN(sortMethod, fieldToTermStatsMap, topN, totalDocs);
 			
-			mapToNameList(docNL, fieldToTermStatsMapSorted,true);
+			mapToNameList(termVectors, fieldToTermStatsMapSorted,true);
 			rb.rsp.add(TERM_VECTORS, termVectors);
 			// timer
 			LOGGER.info("finishStage Time:" + getTimeMS(startTime));
 		}
+	}
+	
+	private Map<String,Map<String, NGrammStats>> sortByAndGetTopN(String sortMethod,Map<String, Map<String, NGrammStats>>  fieldToTermStatsMap,int topN,int totalDocs){
+		Map<String,Map<String, NGrammStats>> fieldToTermStatsMapSorted = new HashMap<String,Map<String, NGrammStats>>(); 
+		if(sortMethod.equals("df"))
+			fieldToTermStatsMapSorted = sortFieldToTermStatsMapByGetTopN(fieldToTermStatsMap,"df",topN);
+		else if(sortMethod.equals("tf"))
+			fieldToTermStatsMapSorted = sortFieldToTermStatsMapByGetTopN(fieldToTermStatsMap,"tf",topN);
+		else if(sortMethod.equals("idf")){
+			calculateIdfScores(fieldToTermStatsMap,totalDocs);
+			fieldToTermStatsMapSorted = sortFieldToTermStatsMapByGetTopN(fieldToTermStatsMap,"idf",topN);
+		}
+		return fieldToTermStatsMapSorted;
 	}
 	
 	private void calculateIdfScores(Map<String, Map<String, NGrammStats>> fieldToTermStatsMap,int totalDocs){
@@ -521,7 +530,10 @@ public class NGrammComponent extends SearchComponent implements SolrCoreAware {
 					NGrammStats ngrammStats = new NGrammStats();
 					for (int c = 0; c< nl4.size(); c++) {
 						String TermStatName = nl4.getName(c);
-						ngrammStats.add(TermStatName, (Integer)nl4.getVal(c));
+						if(TermStatName.equals("idf"))
+							ngrammStats.setIdf((Double)nl4.getVal(c));
+						else
+							ngrammStats.add(TermStatName, (Integer)nl4.getVal(c));
 					}
 					
 					if(termStats != null){
