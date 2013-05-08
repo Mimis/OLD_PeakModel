@@ -5,6 +5,7 @@
 ¨	white-space:nowrap{
 }
 
+		
 
 		.doc {
 		  -webkit-box-sizing: border-box;
@@ -79,6 +80,17 @@
 		  float: right;
 		  max-width: 145px;		  
 		} 
+		
+		/**
+		Select Method
+		**/
+		.select_option {
+		  text-align : center;
+		}
+		.select_option > select {
+		  width : 65px;
+		}
+		
 		
 		/**
 		Doc Content

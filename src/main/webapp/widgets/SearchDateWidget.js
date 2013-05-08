@@ -1,6 +1,6 @@
 (function($) {
 
-	AjaxSolr.DateWidget = AjaxSolr.AbstractFacetWidget.extend({
+	AjaxSolr.SearchDateWidget = AjaxSolr.AbstractFacetWidget.extend({
 
 		init : function() {
 			var self = this;						

@@ -13,70 +13,46 @@ var Manager;
 
 		//In AJAX Solr, the Manager sends these requests, and passes the responses to each widget for handling.
 		Manager = new AjaxSolr.Manager({
-			//set url: http://groups.google.com/group/ajax-solr/browse_thread/thread/2e7c6f359234cc59/d2cff193e02fd9cd?lnk=gst&q=solrUrl#d2cff193e02fd9cd
 			solrUrl : 'http://localhost:8080/solr/'
 		});
- 
 
+
+		//Show total results and response time: 5125546 Articles in 13.007 secs
 		Manager.addWidget(new AjaxSolr.ShowResultInfoWidget({
 			id: 'showResults',
 		    target: '#mini_result_message'
 		}));
-			//NOT IN USE FOR SEMANTIC VIEW
-//		/**
-//		 * Any widget inheriting from AbstractFacetWidget takes a required field property, 
-//		 * identifying the facet field the widget will handle. Note that, in our example, 
-//		 * the target HTML element is conveniently named after the Solr field. This may not 
-//		 * be the case in your application; set your field property accordingly.
-//		 * 
-//		 */
-//		//Before we define any methods on the widget, let’s add an instance of the widget to the Manager in reuters.js:
-//		Manager.addWidget(new AjaxSolr.ResultWidget({
-//			id : 'result',    //Every widget takes a required id, to identify the widget, and an optional target
-//			target : '#docs'  //The target is usually the CSS selector for the HTML element that the widget updates after each Solr request.
-//		}));
-//		
-//				
-//		//PAGINATORS!!!  only BOTTOM
-//		Manager.addWidget(new AjaxSolr.PagerWidget({
-//			id: 'pager2',
-//		    target: '#pager2',
-//		    prevLabel: '&larr; Previous',
-//		    nextLabel: 'Next &rarr;',
-//		    innerWindow: 1,
-//		    mini_sum_results_target: '#mini_result_message'
-//		}));
-		
-
 		
 		
 
 		/*
-		 * Raw Term Most and Less Frequent TagcloudWidget
+		 * TagcloudWidget 
 		 */
-		Manager.addWidget(new AjaxSolr.RawTF_TagcloudWidget({
-		    id: 'raw_asc_desc_article_title',
-		    target: '#raw_asc_article_title',
-		    target_desc: '#raw_desc_article_title',
-		    field: 'article_title',
-		    final_nr_docs: 35
-		}));
 		
+		var fields = [ 'article_title', 'paragraph' ];
+		for (var i = 0, l = fields.length; i < l; i++) {
+		 	Manager.addWidget(new AjaxSolr.TagcloudWidget({
+			    id: 'ngram_tag_'+fields[i],
+			    target: '#ngram_tag_'+fields[i],
+			    field: fields[i]
+			}));
+		}
+
 		/*
-		 * Inverse Document Frequency Tag Cloud
-		 *
-
-		Manager.addWidget(new AjaxSolr.IDF_TagcloudWidget({
-		    id: 'article_idf_tagcloud',
-		    target: '#idf_article_title',
-		    field: 'article_title',
-		    final_nr_docs: 15,
-		    target_graph: 'idf-rank',
-		    totalNrDocs: 29470132 //this is the total number of dicument in our collection
-		}));
-
-		*/
-
+		 * Select Method Widget
+		 */
+		var fields 		= [ 'method','topNgrams','topDocs'];
+		var solr_param  = [ 'ng.sort','ng.topN','rows'];
+		for (var i = 0, l = fields.length; i < l; i++) {
+		 	Manager.addWidget(new AjaxSolr.SelectWidget({
+			    id: 'select_'+fields[i],
+			    target: '#select_'+fields[i],
+			    solr_param: solr_param[i]
+			}));
+		}
+		
+		 
+	
 
 		/*
 		 * Time Series GraphWidget
@@ -87,14 +63,6 @@ var Manager;
 			field: 'date',
 			parseTime: true
 		}));
-		/*
-		Manager.addWidget(new AjaxSolr.TimeSeriesGraphWidget({
-			id: 'graph_title',
-			target: 'tf-rank',
-			field: 'article_title',
-			parseTime:false
-		}));
-		*/
 		
 		
 		/*
@@ -108,7 +76,7 @@ var Manager;
 		/*
 		 * Date Search Widget -  
 		 */	
-		Manager.addWidget(new AjaxSolr.DateWidget({
+		Manager.addWidget(new AjaxSolr.SearchDateWidget({
 			id : 'dateFilter',
 			target : '#date_query',
 			field : 'date',
@@ -145,7 +113,7 @@ var Manager;
 		Manager.init();
 		
 		//use the ParameterStore addByValue API method right now to build a basic query
-		Manager.store.addByValue('q', '*:*');
+		Manager.store.addByValue('q', 'test');
 //		sort by extraction date:
 //		Manager.store.addByValue('sort', 'extraction_date desc');
 		//sort by score...example
@@ -160,14 +128,18 @@ var Manager;
 		 * First, add the Solr parameters to the Manager for faceting in reuters.js:
 		 */
 		var params = {
-			facet : true,
-			'facet.field' : ['article_title', 'date'], //These fields are out facet fields
-			'facet.limit' : 1000, 
-			'f.date.facet.limit': 150,
+			facet : false,
+			'facet.field' : ['date'], //These fields are out facet fields
+			'facet.limit' : 100,
 			'facet.offset' : 0,
 			'facet.mincount' : 1,
-			'json.nl' : 'map',
-			'rows' : '0'   //THIS IS THE NUMBER OF RESULTS THAT WE RETURN EVERY QUERY
+			'json.nl' : 'map',				
+			'tv.fl' :  ['article_title','paragraph'],
+			'tv.tf' : true,
+			'tv.df' : true,
+			'ng.sort' : 'tf',
+			'ng.topN' : 10,
+			'rows' : '10'   //THIS IS THE NUMBER OF RESULTS THAT WE RETURN EVERY QUER by default
 		};
 		for ( var name in params) {
 			Manager.store.addByValue(name, params[name]);

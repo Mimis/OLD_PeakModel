@@ -40,16 +40,15 @@
 	<script type="text/javascript" src="lib/core/Parameter.js"></script>
 	<script type="text/javascript" src="lib/core/ParameterStore.js"></script>
 	<script type="text/javascript" src="lib/core/AbstractTextWidget.js"></script>
-	<script type="text/javascript" src="widgets/ResultWidget.js"></script>
 	<script type="text/javascript" src="js/reuters.theme.js"></script>
 	<script type="text/javascript" src="lib/helpers/jquery/ajaxsolr.theme.js"></script>
 	<script type="text/javascript" src="lib/helpers/ajaxsolr.support.js"></script>
     <script type="text/javascript" src="lib/helpers/ajaxsolr.theme.js"></script>
 	<script type="text/javascript" src="lib/core/AbstractFacetWidget.js"></script>
-	<script type="text/javascript" src="widgets/DateWidget.js"></script> 		
+	<script type="text/javascript" src="widgets/SearchDateWidget.js"></script>
+	<script type="text/javascript" src="widgets/SelectWidget.js"></script> 		
 	<script type="text/javascript" src="lib/core/ParameterHashStore.js"></script>
-	<script type="text/javascript" src="widgets/RawTF_TagcloudWidget.js"></script>
-	<script type="text/javascript" src="widgets/IDF_TagcloudWidget.js"></script>
+	<script type="text/javascript" src="widgets/TagcloudWidget.js"></script>
 	<script type="text/javascript" src="widgets/TimeSeriesGraphWidget.js"></script>
 	<script type="text/javascript" src="widgets/CurrentSearchWidget.js"></script>
 	<script type="text/javascript" src="widgets/TextWidget.js"></script> 
@@ -154,7 +153,37 @@
 <!--				  <button class="btn show_classic_view_but" type="button">Show Classic View</button>-->
 <!--				  <button class="btn show_wordCloud_view_but" type="button">Show Semantic View</button>-->
 <!--				</div>-->
-			</div>          		
+			</div>          
+			
+			<!-- SELECT METHODS OPTIONS	for the terms that exist in returned docs -->
+			<div id="selects" class="select_option">
+				<span id="select_method" class="select_option">
+					Utility Measure:
+					<select>
+						  <option>tf</option>
+						  <option>df</option>
+						  <option>idf</option>
+					</select>
+				</span>
+				
+				<span id="select_topNgrams" class="select_option">
+					Return Top Ngrams:
+					<select>
+						  <option>10</option>
+						  <option>20</option>
+						  <option>30</option>
+					</select>
+				</span>
+				<span id="select_topDocs" class="select_option">
+					Return Top Docs:
+					<select>
+						  <option>10</option>
+						  <option>20</option>
+						  <option>30</option>
+					</select>
+				</span>
+			</div>
+					
       		<!--         
 			  ** HERE WE SHOW THE CURRENT QUERY PARAMETERS(FACETS) **
 			-->
@@ -192,16 +221,16 @@
         	<div class="row-fluid wordCloud_result_view">
 		    	<div class="span12">
 		    		<div class="facet">
-		    		    <h3 class="show_resources1">Most frequent Title Term Doc Frequency Word Cloud</h3>
+		    		    <h3 class="show_resources1">Title:</h3>
 						<div id="panel1">
-							<div class="tagcloud" id="raw_asc_article_title"></div>
+							<div class="tagcloud" id="ngram_tag_article_title"></div>
 						</div>
 					</div>
 
 					<div class="facet">
-				    	<h3 class="show_resources2">Less frequent Title Term Doc Frequency Word Cloud</h3>
+				    	<h3 class="show_resources2">Paragraps:</h3>
 						<div id="panel2">
-							<div class="tagcloud" id="raw_desc_article_title"></div>
+							<div class="tagcloud" id="ngram_tag_paragraph"></div>
 						</div>
 					</div>
 					
